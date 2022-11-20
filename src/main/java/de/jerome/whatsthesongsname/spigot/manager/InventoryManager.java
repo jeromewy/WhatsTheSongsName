@@ -18,16 +18,15 @@ public class InventoryManager {
 
     private static final ConfigManager configManager = WITSNMain.getInstance().getConfigManager();
 
-    private final Inventory choseInventory;
+    // Must not be final, otherwise the title cannot be changed during a reload.
+    private Inventory choseInventory;
 
     public InventoryManager() {
-        choseInventory = Bukkit.createInventory(null, 9, configManager.getMessage(Messages.INVENTORY_TITLE));
-
-        addItems();
+        reload();
     }
 
     public void reload() {
-        choseInventory.clear();
+        choseInventory = Bukkit.createInventory(null, 9, configManager.getMessage(Messages.INVENTORY_TITLE));
         addItems();
     }
 
