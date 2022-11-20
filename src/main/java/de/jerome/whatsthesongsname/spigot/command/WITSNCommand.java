@@ -98,10 +98,11 @@ public class WITSNCommand implements CommandExecutor, TabExecutor {
                     return true;
                 }
 
-                //TODO: add reload
+                if (!WITSNMain.getInstance().reload()) {
+                    commandSender.sendMessage(configManager.getMessage(Messages.RELOAD_FAILED));
+                }
 
-
-                commandSender.sendMessage(configManager.getMessage(Messages.RELOAD_FAILED));
+                commandSender.sendMessage(configManager.getMessage(Messages.RELOAD_SUCCESS));
                 return true;
             }
 

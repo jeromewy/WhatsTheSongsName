@@ -18,7 +18,7 @@ leave:
   left: "&aYou have successfully left the game"
 reload:
   success: "&aAll files have been reloaded"
-  failed: "&cReload currently not implemented. Please restart your server!"
+  failed: "&cThere was an error reloading the plugin. Please contact an administrator and, if necessary, the developer of the plugin."
 stats:
   own: |-
     &9Your statistics:
