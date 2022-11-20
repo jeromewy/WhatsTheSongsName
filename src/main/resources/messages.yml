@@ -1,0 +1,47 @@
+syntax:
+  info: "&9You can use the following commands:"
+  join: "&8- &6/{commandName} join &8- &7Join the game"
+  leave: "&8- &6/{commandName} leave &8- &7Leave the game"
+  reload: "&8- &6/{commandName} reload &8- &7Reloads the songs and the configuration"
+  stats:
+    own: "&8- &6/{commandName} stats &8- &7Shows your statistics"
+    other: "&8- &6/{commandName} stats [player] &8- &7Shows the statistics of a player"
+  noPermission: "&8- &cYou don't have the permissions for any subcommands"
+info: |-
+  &bWhat's the song's name? &7is a song guessing game by &6{pluginAuthors}
+  &8- &7Use &6/{commandName} help &7for help
+join:
+  alreadyInGame: "&cYou are already in the game"
+  joined: "&aYou have successfully entered the game"
+leave:
+  notInGame: "&cYou are not in the game"
+  left: "&aYou have successfully left the game"
+reload:
+  success: "&aAll files have been reloaded"
+  failed: "&cReload currently not implemented. Please restart your server!"
+stats:
+  own: |-
+    &9Your statistics:
+    &8- &6Points: &b{playerPoints}
+    &8- &6Right guessing songs: &b{playerGuessedCorrectly}
+    &8- &6Wrong guessing songs: &b{playerGuessedWrong}
+  other:
+    success: |-
+      &9Statistics of &b{playerName}&9:
+      &8- &6Points: &b{playerPoints}
+      &8- &6Right guessing songs: &b{playerGuessedCorrectly}
+      &8- &6Wrong guessing songs: &b{playerGuessedWrong}
+    playerNotFound: "&cThe player &b{playerName} &ccould not be found!"
+choseEvaluation:
+  songName: "&9The song was called &b{songTitle} &9by &b{songAuthor}"
+  correctAnswer: "&aYour answer was correct!"
+  wrongAnswer: "&cYour answer was wrong!"
+  noAnswer: "&cYou have not submitted an answer!"
+submitAnswer: "&9You have selected the song &b{songTitle}"
+inventory:
+  title: "Chose the right title:"
+  songItems:
+    displaynameColor: "6"
+    lore:
+      - "Author:"
+      - "{songAuthor}"
