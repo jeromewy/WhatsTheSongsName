@@ -3,7 +3,7 @@ prefix: WITSN
 description: A song guessing game
 
 main: de.jerome.whatsthesongsname.spigot.WITSNMain
-version: 1.0.0
+version: 1.0.1
 api-version: 1.19
 depend:
   - NoteBlockAPI
