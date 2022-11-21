@@ -5,6 +5,7 @@ import de.jerome.whatsthesongsname.spigot.WITSNMain;
 import de.jerome.whatsthesongsname.spigot.object.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ import java.util.logging.Level;
 public class GameManager {
 
     private static final InventoryManager inventoryManager = WITSNMain.getInstance().getInventoryManager();
-    private static final ConfigManager configManager = WITSNMain.getInstance().getConfigManager();
+    private static final LanguagesManager languagesManager = WITSNMain.getInstance().getLanguagesManager();
     private static final SongManager songManager = WITSNMain.getInstance().getSongManager();
 
     private final ArrayList<Player> gamePlayers;
@@ -125,7 +126,7 @@ public class GameManager {
 
         // Opens ChoseInventory
         for (Player gamePlayer : gamePlayers)
-            gamePlayer.openInventory(inventoryManager.getChoseInventory());
+            gamePlayer.openInventory(inventoryManager.getChoseInventory(gamePlayer.getLocale()));
 
         // Starts evaluating the songs after a variable time
         Bukkit.getScheduler().runTaskLater(WITSNMain.getInstance(), this::evaluateChoosing, 20L * WITSNMain.getInstance().getConfigManager().getChoseTime());
@@ -133,37 +134,40 @@ public class GameManager {
 
     private void evaluateChoosing() {
         Song song = WITSNMain.getInstance().getSongManager().getRadioSongPlayer().getSong();
-        int choseInventoryHash = inventoryManager.getChoseInventory().hashCode();
 
         // So that the inventory is not reopened by the InventoryCloseEvent
         allowInventoryClose = true;
 
         for (Player gamePlayer : gamePlayers) {
             // Close ChoseInventory
-            if (gamePlayer.getOpenInventory().getTopInventory().hashCode() == choseInventoryHash)
-                gamePlayer.closeInventory();
+            int hashCode = gamePlayer.getOpenInventory().getTopInventory().hashCode();
+            for (Inventory inventory : WITSNMain.getInstance().getInventoryManager().getChoseInventories().values())
+                if (hashCode == inventory.hashCode()) {
+                    gamePlayer.closeInventory();
+                    break;
+                }
 
-            gamePlayer.sendMessage(configManager.getMessage(Messages.CHOSE_EVALUATION_SONG_NAME)
+            gamePlayer.sendMessage(languagesManager.getMessage(gamePlayer.getLocale(), Messages.CHOSE_EVALUATION_SONG_NAME)
                     .replaceAll("\\{songTitle}", song.getTitle())
                     .replaceAll("\\{songAuthor}", song.getAuthor()));
 
             // Evaluate song selection
             if (!playerAnswers.containsKey(gamePlayer)) {
                 // No answer by player
-                gamePlayer.sendMessage(configManager.getMessage(Messages.CHOSE_EVALUATION_NO_ANSWER));
+                gamePlayer.sendMessage(languagesManager.getMessage(gamePlayer.getLocale(), Messages.CHOSE_EVALUATION_NO_ANSWER));
                 continue;
             }
 
             if (!playerAnswers.get(gamePlayer).equals(song.getTitle())) {
                 // Wrong answer
                 WITSNMain.getInstance().getPlayerManager().getPlayer(gamePlayer).addGuessedWrong();
-                gamePlayer.sendMessage(configManager.getMessage(Messages.CHOSE_EVALUATION_WRONG_ANSWER));
+                gamePlayer.sendMessage(languagesManager.getMessage(gamePlayer.getLocale(), Messages.CHOSE_EVALUATION_WRONG_ANSWER));
                 continue;
             }
 
             // Correct answer
             WITSNMain.getInstance().getPlayerManager().getPlayer(gamePlayer).addGuessedCorrectly();
-            gamePlayer.sendMessage(configManager.getMessage(Messages.CHOSE_EVALUATION_CORRECT_ANSWER));
+            gamePlayer.sendMessage(languagesManager.getMessage(gamePlayer.getLocale(), Messages.CHOSE_EVALUATION_CORRECT_ANSWER));
         }
 
         // Disables inventory closing again
