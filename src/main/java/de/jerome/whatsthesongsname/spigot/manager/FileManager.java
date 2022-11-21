@@ -5,16 +5,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class FileManager {
 
-    private final FileObject config, messages, players;
+    private final FileObject config, players;
 
     public FileManager() {
         config = new FileObject("config.yml");
-        messages = new FileObject("messages.yml");
         players = new FileObject("players.yml");
     }
 
     public boolean reload() {
-        return config.reload() && messages.reload() && players.reload();
+        return config.reload() && players.reload();
     }
 
     public boolean save() {
@@ -23,10 +22,6 @@ public class FileManager {
 
     public @NotNull FileObject getConfig() {
         return config;
-    }
-
-    public @NotNull FileObject getMessages() {
-        return messages;
     }
 
     public @NotNull FileObject getPlayers() {

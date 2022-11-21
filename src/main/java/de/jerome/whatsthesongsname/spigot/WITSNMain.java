@@ -16,6 +16,7 @@ public class WITSNMain extends JavaPlugin {
     private FileManager fileManager;
     private GameManager gameManager;
     private InventoryManager inventoryManager;
+    private LanguagesManager languagesManager;
     private PlayerManager playerManager;
     private SongManager songManager;
     private UUIDFetcher uuidFetcher;
@@ -57,6 +58,7 @@ public class WITSNMain extends JavaPlugin {
         uuidFetcher = new UUIDFetcher();
         fileManager = new FileManager();
         configManager = new ConfigManager(); // FileManager
+        languagesManager = new LanguagesManager(); // FileManager
 
         vaultManager = new VaultManager(); // ConfigManager
         playerManager = new PlayerManager(); // ConfigManager
@@ -88,6 +90,10 @@ public class WITSNMain extends JavaPlugin {
 
     public @NotNull InventoryManager getInventoryManager() {
         return inventoryManager;
+    }
+
+    public @NotNull LanguagesManager getLanguagesManager() {
+        return languagesManager;
     }
 
     public @NotNull PlayerManager getPlayerManager() {

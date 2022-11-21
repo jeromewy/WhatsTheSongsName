@@ -6,6 +6,12 @@ reward:
   correct: 10
   wrong: 5
 
+languages:
+  default: "en_us"
+  languages:
+    - en_us
+    - de_de
+
 # currently not implemented!
 bungeecord:
   enable: false

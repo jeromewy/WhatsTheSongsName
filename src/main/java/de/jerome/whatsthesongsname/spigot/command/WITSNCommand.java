@@ -1,7 +1,7 @@
 package de.jerome.whatsthesongsname.spigot.command;
 
 import de.jerome.whatsthesongsname.spigot.WITSNMain;
-import de.jerome.whatsthesongsname.spigot.manager.ConfigManager;
+import de.jerome.whatsthesongsname.spigot.manager.LanguagesManager;
 import de.jerome.whatsthesongsname.spigot.object.Messages;
 import de.jerome.whatsthesongsname.spigot.object.WITSNPlayer;
 import org.bukkit.Bukkit;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class WITSNCommand implements CommandExecutor, TabExecutor {
 
-    private static final ConfigManager configManager = WITSNMain.getInstance().getConfigManager();
+    private static final LanguagesManager languagesManager = WITSNMain.getInstance().getLanguagesManager();
 
     /*
      * help - / - Shows all commands
@@ -34,9 +34,11 @@ public class WITSNCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String commandName, @NotNull String[] args) {
+        String isocode = null;
+        if (commandSender instanceof Player player) isocode = player.getLocale();
 
         if (args.length == 0) {
-            commandSender.sendMessage(configManager.getMessage(Messages.INFO)
+            commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.INFO)
                     .replaceAll("\\{pluginAuthors}", WITSNMain.getInstance().getDescription().getAuthors().toString())
                     .replaceAll("\\{commandName}", commandName));
             return true;
@@ -59,11 +61,11 @@ public class WITSNCommand implements CommandExecutor, TabExecutor {
 
                 // Is he already in the game? If not, he enters it
                 if (!WITSNMain.getInstance().getGameManager().joinGame(player)) {
-                    commandSender.sendMessage(configManager.getMessage(Messages.JOIN_ALREADY_IN_GAME));
+                    commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.JOIN_ALREADY_IN_GAME));
                     return true;
                 }
 
-                commandSender.sendMessage(configManager.getMessage(Messages.JOIN_JOINED));
+                commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.JOIN_JOINED));
                 return true;
             }
 
@@ -83,11 +85,11 @@ public class WITSNCommand implements CommandExecutor, TabExecutor {
 
                 // Is he in game? If so, he leaves
                 if (!WITSNMain.getInstance().getGameManager().leaveGame(player)) {
-                    commandSender.sendMessage(configManager.getMessage(Messages.LEAVE_NOT_IN_GAME));
+                    commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.LEAVE_NOT_IN_GAME));
                     return true;
                 }
 
-                commandSender.sendMessage(configManager.getMessage(Messages.JOIN_JOINED));
+                commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.JOIN_JOINED));
                 return true;
             }
 
@@ -99,10 +101,10 @@ public class WITSNCommand implements CommandExecutor, TabExecutor {
                 }
 
                 if (!WITSNMain.getInstance().reload()) {
-                    commandSender.sendMessage(configManager.getMessage(Messages.RELOAD_FAILED));
+                    commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.RELOAD_FAILED));
                 }
 
-                commandSender.sendMessage(configManager.getMessage(Messages.RELOAD_SUCCESS));
+                commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.RELOAD_SUCCESS));
                 return true;
             }
 
@@ -122,7 +124,7 @@ public class WITSNCommand implements CommandExecutor, TabExecutor {
                 WITSNPlayer witsnPlayer = WITSNMain.getInstance().getPlayerManager().getPlayer(player);
 
                 // The Stats of the player
-                commandSender.sendMessage(configManager.getMessage(Messages.STATS_OWN)
+                commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.STATS_OWN)
                         .replaceAll("\\{playerPoints}", String.valueOf(witsnPlayer.getPoints()))
                         .replaceAll("\\{playerGuessedCorrectly}", String.valueOf(witsnPlayer.getGuessedCorrectly()))
                         .replaceAll("\\{playerGuessedWrong}", String.valueOf(witsnPlayer.getGuessedWrong())));
@@ -142,13 +144,13 @@ public class WITSNCommand implements CommandExecutor, TabExecutor {
 
                 // Is there the player from whom the stats are requested?
                 if (witsnTarget == null) {
-                    commandSender.sendMessage(configManager.getMessage(Messages.STATS_OTHER_PLAYER_NOT_FOUND)
+                    commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.STATS_OTHER_PLAYER_NOT_FOUND)
                             .replaceAll("\\{playerName}", args[1]));
                     return true;
                 }
 
                 // The Stats of the player
-                commandSender.sendMessage(configManager.getMessage(Messages.STATS_OWN)
+                commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.STATS_OWN)
                         .replaceAll("\\{playerName}", String.valueOf(witsnTarget.getName()))
                         .replaceAll("\\{playerPoints}", String.valueOf(witsnTarget.getPoints()))
                         .replaceAll("\\{playerGuessedCorrectly}", String.valueOf(witsnTarget.getGuessedCorrectly()))
@@ -194,30 +196,36 @@ public class WITSNCommand implements CommandExecutor, TabExecutor {
     }
 
     private void sendSyntaxMessage(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String commandName, @NotNull String[] args) {
-        boolean minOnePermission = false;
-        boolean player = commandSender instanceof Player;
+        String isocode = null;
+        boolean player = false;
+        if (commandSender instanceof Player tempPlayer) {
+            isocode = tempPlayer.getLocale();
+            player = true;
+        }
 
-        commandSender.sendMessage(configManager.getMessage(Messages.SYNTAX_INFO));
+        boolean minOnePermission = false;
+
+        commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.SYNTAX_INFO));
         if (player && commandSender.hasPermission("witsn.play")) {
             minOnePermission = true;
-            commandSender.sendMessage(configManager.getMessage(Messages.SYNTAX_JOIN).replaceAll("\\{commandName}", commandName));
-            commandSender.sendMessage(configManager.getMessage(Messages.SYNTAX_LEAVE).replaceAll("\\{commandName}", commandName));
+            commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.SYNTAX_JOIN).replaceAll("\\{commandName}", commandName));
+            commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.SYNTAX_LEAVE).replaceAll("\\{commandName}", commandName));
         }
 
         if (commandSender.hasPermission("witsn.reload")) {
             minOnePermission = true;
-            commandSender.sendMessage(configManager.getMessage(Messages.SYNTAX_RELOAD).replaceAll("\\{commandName}", commandName));
+            commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.SYNTAX_RELOAD).replaceAll("\\{commandName}", commandName));
         }
 
         if (commandSender.hasPermission("witsn.stats.other")) {
             minOnePermission = true;
-            commandSender.sendMessage(configManager.getMessage(Messages.SYNTAX_STATS_OTHER).replaceAll("\\{commandName}", commandName));
+            commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.SYNTAX_STATS_OTHER).replaceAll("\\{commandName}", commandName));
         } else if (player && commandSender.hasPermission("witsn.stats")) {
             minOnePermission = true;
-            commandSender.sendMessage(configManager.getMessage(Messages.SYNTAX_STATS_OWN).replaceAll("\\{commandName}", commandName));
+            commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.SYNTAX_STATS_OWN).replaceAll("\\{commandName}", commandName));
         }
 
         if (!minOnePermission)
-            commandSender.sendMessage(configManager.getMessage(Messages.SYNTAX_NO_PERMISSION).replaceAll("\\{commandName}", commandName));
+            commandSender.sendMessage(languagesManager.getMessage(isocode, Messages.SYNTAX_NO_PERMISSION).replaceAll("\\{commandName}", commandName));
     }
 }
