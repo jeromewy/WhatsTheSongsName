@@ -15,6 +15,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void handlePlayerQuit(PlayerQuitEvent event) {
         WITSNMain.getInstance().getGameManager().leaveGame(event.getPlayer());
+        WITSNMain.getInstance().getPlayerManager().getPlayer(event.getPlayer()).save();
     }
 
 }

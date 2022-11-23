@@ -8,6 +8,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class WITSNPlayer {
@@ -24,7 +26,7 @@ public class WITSNPlayer {
         this.uuid = uuid;
         offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-        update();
+        reload();
     }
 
     public WITSNPlayer(UUID uuid, String name) {
@@ -32,24 +34,51 @@ public class WITSNPlayer {
         offlinePlayer = Bukkit.getOfflinePlayer(uuid);
         this.name = name;
 
-        update();
+        reload();
     }
 
     public WITSNPlayer(OfflinePlayer offlinePlayer) {
         uuid = offlinePlayer.getUniqueId();
         this.offlinePlayer = offlinePlayer;
 
-        update();
+        reload();
     }
 
-    public void update() {
-        points = players.getInt(uuid + ".points");
-        guessedCorrectly = players.getInt(uuid + ".guessedCorrectly");
-        guessedWrong = players.getInt(uuid + ".guessedWrong");
+    public void reload() {
+        if (WITSNMain.getInstance().getConfigManager().isDatabaseEnable()) {
+            try {
+                ResultSet resultSet = WITSNMain.getInstance().getDatabaseManager().getStatement().executeQuery("SELECT * FROM witsn_players WHERE UUID = '" + uuid + "'");
+                if (resultSet.next()) {
+                    points = resultSet.getInt("POINTS");
+                    guessedCorrectly = resultSet.getInt("GUESSED_CORRECTLY");
+                    guessedWrong = resultSet.getInt("GUESSED_WRONG");
+                } else
+                    WITSNMain.getInstance().getDatabaseManager().getStatement().executeUpdate("INSERT INTO witsn_players (UUID, POINTS, GUESSED_CORRECTLY, GUESSED_WRONG) VALUES ('" + uuid + "', " + points + ", " + guessedCorrectly + ", " + guessedCorrectly + ")");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            points = players.getInt(uuid + ".points");
+            guessedCorrectly = players.getInt(uuid + ".guessedCorrectly");
+            guessedWrong = players.getInt(uuid + ".guessedWrong");
+        }
     }
 
     public void save() {
-        if (!WITSNMain.getInstance().getConfigManager().isDatabaseEnable()) {
+        if (WITSNMain.getInstance().getConfigManager().isDatabaseEnable()) {
+            try {
+                ResultSet resultSet = WITSNMain.getInstance().getDatabaseManager().getStatement().executeQuery("SELECT * FROM witsn_players WHERE UUID = '" + uuid + "'");
+                if (resultSet.next()) {
+                    resultSet.updateInt("POINTS", points);
+                    resultSet.updateInt("GUESSED_CORRECTLY", guessedCorrectly);
+                    resultSet.updateInt("GUESSED_WRONG", guessedWrong);
+                    resultSet.updateRow();
+                } else
+                    WITSNMain.getInstance().getDatabaseManager().getStatement().executeUpdate("INSERT INTO witsn_players (UUID, POINTS, GUESSED_CORRECTLY, GUESSED_WRONG) VALUES ('" + uuid + "', " + points + ", " + guessedCorrectly + ", " + guessedCorrectly + ")");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
             players.set(uuid + ".points", points);
             players.set(uuid + ".guessedCorrectly", guessedCorrectly);
             players.set(uuid + ".guessedWrong", guessedWrong);
