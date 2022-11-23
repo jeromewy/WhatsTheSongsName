@@ -1,6 +1,6 @@
 package de.jerome.whatsthesongsname.spigot.listener;
 
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import de.jerome.whatsthesongsname.spigot.object.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 public class InventoryListener implements Listener {
 
     public InventoryListener() {
-        Bukkit.getPluginManager().registerEvents(this, WITSNMain.getInstance());
+        Bukkit.getPluginManager().registerEvents(this, WTSNMain.getInstance());
     }
 
     @EventHandler
@@ -24,7 +24,7 @@ public class InventoryListener implements Listener {
         // Checks if this is the ChoseInventory
         boolean choseInventory = false;
         int hashCode = event.getInventory().hashCode();
-        for (Inventory inventory : WITSNMain.getInstance().getInventoryManager().getChoseInventories().values())
+        for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
             if (hashCode == inventory.hashCode()) {
                 choseInventory = true;
                 break;
@@ -43,7 +43,7 @@ public class InventoryListener implements Listener {
         // Checks if this is the ChoseInventory
         boolean choseInventory = false;
         int hashCode = event.getInventory().hashCode();
-        for (Inventory inventory : WITSNMain.getInstance().getInventoryManager().getChoseInventories().values())
+        for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
             if (hashCode == inventory.hashCode()) {
                 choseInventory = true;
                 break;
@@ -61,8 +61,8 @@ public class InventoryListener implements Listener {
         if (displayName.isEmpty() || displayName.isBlank()) return;
 
         // Saves the player's answer and closes the inventory
-        WITSNMain.getInstance().getGameManager().getPlayerAnswers().put(player, displayName);
-        player.sendMessage(WITSNMain.getInstance().getLanguagesManager().getMessage(player.getLocale(), Messages.SUBMIT_ANSWER)
+        WTSNMain.getInstance().getGameManager().getPlayerAnswers().put(player, displayName);
+        player.sendMessage(WTSNMain.getInstance().getLanguagesManager().getMessage(player.getLocale(), Messages.SUBMIT_ANSWER)
                 .replaceAll("\\{songTitle}", displayName));
 
         event.getView().close();
@@ -76,7 +76,7 @@ public class InventoryListener implements Listener {
         // Checks if this is the ChoseInventory
         boolean choseInventory = false;
         int hashCode = event.getInventory().hashCode();
-        for (Inventory inventory : WITSNMain.getInstance().getInventoryManager().getChoseInventories().values())
+        for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
             if (hashCode == inventory.hashCode()) {
                 choseInventory = true;
                 break;
@@ -85,9 +85,9 @@ public class InventoryListener implements Listener {
         if (!choseInventory) return;
 
         // Reopens the inventory if no answer has been given yet
-        if (!WITSNMain.getInstance().getGameManager().getPlayerAnswers().containsKey(player)
-                && !WITSNMain.getInstance().getGameManager().isAllowInventoryClose())
-            Bukkit.getScheduler().runTask(WITSNMain.getInstance(), () -> player.openInventory(event.getInventory()));
+        if (!WTSNMain.getInstance().getGameManager().getPlayerAnswers().containsKey(player)
+                && !WTSNMain.getInstance().getGameManager().isAllowInventoryClose())
+            Bukkit.getScheduler().runTask(WTSNMain.getInstance(), () -> player.openInventory(event.getInventory()));
     }
 
 }

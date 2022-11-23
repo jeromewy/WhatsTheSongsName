@@ -1,9 +1,9 @@
 name: WhatsTheSongsName
-prefix: WITSN
+prefix: WTSN
 description: A song guessing game
 
-main: de.jerome.whatsthesongsname.spigot.WITSNMain
-version: 1.0.1
+main: de.jerome.whatsthesongsname.spigot.WTSNMain
+version: 1.0.2
 api-version: 1.19
 depend:
   - NoteBlockAPI
@@ -11,14 +11,11 @@ softdepend:
   - Vault
 
 author: JeyVDW
-website: https://www.spigotmc.org/members/361946/
+website: https://github.com/JeyVDW
 
 commands:
-  whatisthesongsname:
+  whatsthesongsname:
     description: Main command
-    usage: /whatisthesongsname
+    usage: /whatsthesongsname
     aliases:
-      - witsn
-  test:
-    description: Test command
-    usage: /test
+      - wtsn

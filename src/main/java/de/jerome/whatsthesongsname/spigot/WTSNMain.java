@@ -1,6 +1,6 @@
 package de.jerome.whatsthesongsname.spigot;
 
-import de.jerome.whatsthesongsname.spigot.command.WITSNCommand;
+import de.jerome.whatsthesongsname.spigot.command.WTSNCommand;
 import de.jerome.whatsthesongsname.spigot.listener.InventoryListener;
 import de.jerome.whatsthesongsname.spigot.listener.PlayerListener;
 import de.jerome.whatsthesongsname.spigot.manager.*;
@@ -8,9 +8,9 @@ import de.jerome.whatsthesongsname.spigot.util.UUIDFetcher;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class WITSNMain extends JavaPlugin {
+public class WTSNMain extends JavaPlugin {
 
-    private static WITSNMain instance;
+    private static WTSNMain instance;
 
     private ConfigManager configManager;
     private DatabaseManager databaseManager;
@@ -24,7 +24,7 @@ public class WITSNMain extends JavaPlugin {
 
     private VaultManager vaultManager;
 
-    public static @NotNull WITSNMain getInstance() {
+    public static @NotNull WTSNMain getInstance() {
         return instance;
     }
 
@@ -74,7 +74,7 @@ public class WITSNMain extends JavaPlugin {
     }
 
     private void registerCommands() {
-        new WITSNCommand();
+        new WTSNCommand();
     }
 
     private void registerListeners() {

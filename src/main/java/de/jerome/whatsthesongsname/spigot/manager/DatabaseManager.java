@@ -1,13 +1,13 @@
 package de.jerome.whatsthesongsname.spigot.manager;
 
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.*;
 
 public class DatabaseManager {
 
-    private static final ConfigManager configManager = WITSNMain.getInstance().getConfigManager();
+    private static final ConfigManager configManager = WTSNMain.getInstance().getConfigManager();
 
     private Connection connection;
     private Statement statement;
@@ -48,7 +48,7 @@ public class DatabaseManager {
 
     public void checkTables() {
         try {
-            getStatement().executeUpdate("CREATE TABLE IF NOT EXISTS witsn_players (UUID VARCHAR (37), POINTS INT, GUESSED_CORRECTLY INT, GUESSED_WRONG INT, PRIMARY KEY (UUID))");
+            getStatement().executeUpdate("CREATE TABLE IF NOT EXISTS wtsn_players (UUID VARCHAR (37), POINTS INT, GUESSED_CORRECTLY INT, GUESSED_WRONG INT, PRIMARY KEY (UUID))");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

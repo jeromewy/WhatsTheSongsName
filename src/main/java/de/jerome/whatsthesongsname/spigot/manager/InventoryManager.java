@@ -1,7 +1,7 @@
 package de.jerome.whatsthesongsname.spigot.manager;
 
 import com.xxmicloxx.NoteBlockAPI.model.Song;
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import de.jerome.whatsthesongsname.spigot.object.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class InventoryManager {
 
-    private static final LanguagesManager languagesManager = WITSNMain.getInstance().getLanguagesManager();
+    private static final LanguagesManager languagesManager = WTSNMain.getInstance().getLanguagesManager();
 
     // Must not be final, otherwise the title cannot be changed during a reload.
     private final HashMap<String, Inventory> choseInventories;
@@ -30,10 +30,10 @@ public class InventoryManager {
 
     public void reload() {
         choseInventories.clear();
-        for (String isocode : WITSNMain.getInstance().getLanguagesManager().getIsocodes()) {
-            Inventory inventory = Bukkit.createInventory(null, 9, languagesManager.getMessage(isocode, Messages.INVENTORY_TITLE));
+        for (String localeCode : WTSNMain.getInstance().getLanguagesManager().getLocaleCodes()) {
+            Inventory inventory = Bukkit.createInventory(null, 9, languagesManager.getMessage(localeCode, Messages.INVENTORY_TITLE));
             addItems(inventory);
-            choseInventories.put(isocode, inventory);
+            choseInventories.put(localeCode, inventory);
         }
     }
 
@@ -63,7 +63,7 @@ public class InventoryManager {
             itemMeta.setDisplayName(ChatColor.getByChar(languagesManager.getMessage(entry.getKey(), Messages.INVENTORY_SONG_ITEMS_DISPLAYNAME_COLOR)) + song.getTitle());
 
             List<String> lore = new ArrayList<>();
-            for (String loreEntry : WITSNMain.getInstance().getLanguagesManager().getStringLists(entry.getKey(), Messages.INVENTORY_SONG_ITEMS_LORE))
+            for (String loreEntry : WTSNMain.getInstance().getLanguagesManager().getStringLists(entry.getKey(), Messages.INVENTORY_SONG_ITEMS_LORE))
                 lore.add(loreEntry.replaceAll("\\{songTitle}", song.getTitle())
                         .replaceAll("\\{songAuthor}", song.getAuthor()));
             itemMeta.setLore(lore);
@@ -93,7 +93,7 @@ public class InventoryManager {
         return new HashMap<>(choseInventories);
     }
 
-    public @NotNull Inventory getChoseInventory(String isocode) {
-        return choseInventories.get(isocode);
+    public @NotNull Inventory getChoseInventory(String localeCode) {
+        return choseInventories.get(localeCode);
     }
 }

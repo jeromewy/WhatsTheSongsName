@@ -1,7 +1,7 @@
 package de.jerome.whatsthesongsname.spigot.manager;
 
 import com.xxmicloxx.NoteBlockAPI.model.Song;
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import de.jerome.whatsthesongsname.spigot.object.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,9 +14,9 @@ import java.util.logging.Level;
 
 public class GameManager {
 
-    private static final InventoryManager inventoryManager = WITSNMain.getInstance().getInventoryManager();
-    private static final LanguagesManager languagesManager = WITSNMain.getInstance().getLanguagesManager();
-    private static final SongManager songManager = WITSNMain.getInstance().getSongManager();
+    private static final InventoryManager inventoryManager = WTSNMain.getInstance().getInventoryManager();
+    private static final LanguagesManager languagesManager = WTSNMain.getInstance().getLanguagesManager();
+    private static final SongManager songManager = WTSNMain.getInstance().getSongManager();
 
     private final ArrayList<Player> gamePlayers;
     private final HashMap<Player, String> playerAnswers;
@@ -52,7 +52,7 @@ public class GameManager {
 
         // Checks if there are at least 4 songs
         if (!ready)
-            WITSNMain.getInstance().getLogger().log(Level.WARNING, "At least 4 songs are required for the game to start. Please add more!");
+            WTSNMain.getInstance().getLogger().log(Level.WARNING, "At least 4 songs are required for the game to start. Please add more!");
     }
 
     private void startGame() {
@@ -67,21 +67,21 @@ public class GameManager {
     }
 
     private void startMusic() {
-        WITSNMain.getInstance().getSongManager().getRadioSongPlayer().setPlaying(true);
+        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().setPlaying(true);
         autoStopMusic();
     }
 
     private void stopMusic() {
         // Pause song playback
-        WITSNMain.getInstance().getSongManager().getRadioSongPlayer().setPlaying(false);
+        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().setPlaying(false);
 
         // Selects the next song
-        WITSNMain.getInstance().getSongManager().getRadioSongPlayer().playNextSong();
+        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().playNextSong();
     }
 
     private void autoStopMusic() {
         // Pauses song playback after a variable number of seconds
-        stopMusicTask = Bukkit.getScheduler().runTaskLater(WITSNMain.getInstance(), () -> {
+        stopMusicTask = Bukkit.getScheduler().runTaskLater(WTSNMain.getInstance(), () -> {
             // stops the music
             stopMusic();
 
@@ -89,7 +89,7 @@ public class GameManager {
             startInventoryChose();
 
             stopMusicTask = null;
-        }, 20L * WITSNMain.getInstance().getConfigManager().getMusicPlayTime());
+        }, 20L * WTSNMain.getInstance().getConfigManager().getMusicPlayTime());
     }
 
     private void startInventoryChose() {
@@ -99,10 +99,10 @@ public class GameManager {
         List<Song> choseSongs = new ArrayList<>();
 
         // The correct title is added
-        choseSongs.add(WITSNMain.getInstance().getSongManager().getRadioSongPlayer().getSong());
+        choseSongs.add(WTSNMain.getInstance().getSongManager().getRadioSongPlayer().getSong());
 
         // List of all songs so that some of them can be randomly added to the inventory
-        List<Song> songs = WITSNMain.getInstance().getSongManager().getPlaylist().getSongList();
+        List<Song> songs = WTSNMain.getInstance().getSongManager().getPlaylist().getSongList();
 
         // Iterates through the "songs" list and randomly adds 3 more to "chooseTitles"
         for (int i = 0; i < 3; i++) {
@@ -129,11 +129,11 @@ public class GameManager {
             gamePlayer.openInventory(inventoryManager.getChoseInventory(gamePlayer.getLocale()));
 
         // Starts evaluating the songs after a variable time
-        Bukkit.getScheduler().runTaskLater(WITSNMain.getInstance(), this::evaluateChoosing, 20L * WITSNMain.getInstance().getConfigManager().getChoseTime());
+        Bukkit.getScheduler().runTaskLater(WTSNMain.getInstance(), this::evaluateChoosing, 20L * WTSNMain.getInstance().getConfigManager().getChoseTime());
     }
 
     private void evaluateChoosing() {
-        Song song = WITSNMain.getInstance().getSongManager().getRadioSongPlayer().getSong();
+        Song song = WTSNMain.getInstance().getSongManager().getRadioSongPlayer().getSong();
 
         // So that the inventory is not reopened by the InventoryCloseEvent
         allowInventoryClose = true;
@@ -141,7 +141,7 @@ public class GameManager {
         for (Player gamePlayer : gamePlayers) {
             // Close ChoseInventory
             int hashCode = gamePlayer.getOpenInventory().getTopInventory().hashCode();
-            for (Inventory inventory : WITSNMain.getInstance().getInventoryManager().getChoseInventories().values())
+            for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
                 if (hashCode == inventory.hashCode()) {
                     gamePlayer.closeInventory();
                     break;
@@ -160,13 +160,13 @@ public class GameManager {
 
             if (!playerAnswers.get(gamePlayer).equals(song.getTitle())) {
                 // Wrong answer
-                WITSNMain.getInstance().getPlayerManager().getPlayer(gamePlayer).addGuessedWrong();
+                WTSNMain.getInstance().getPlayerManager().getPlayer(gamePlayer).addGuessedWrong();
                 gamePlayer.sendMessage(languagesManager.getMessage(gamePlayer.getLocale(), Messages.CHOSE_EVALUATION_WRONG_ANSWER));
                 continue;
             }
 
             // Correct answer
-            WITSNMain.getInstance().getPlayerManager().getPlayer(gamePlayer).addGuessedCorrectly();
+            WTSNMain.getInstance().getPlayerManager().getPlayer(gamePlayer).addGuessedCorrectly();
             gamePlayer.sendMessage(languagesManager.getMessage(gamePlayer.getLocale(), Messages.CHOSE_EVALUATION_CORRECT_ANSWER));
         }
 
@@ -198,7 +198,7 @@ public class GameManager {
         gamePlayers.add(player);
 
         // Adds the player to the RadioSongPlayer
-        WITSNMain.getInstance().getSongManager().getRadioSongPlayer().addPlayer(player);
+        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().addPlayer(player);
 
         // Starts the game if it's not already started
         if (!running) startGame();
@@ -220,7 +220,7 @@ public class GameManager {
         playerAnswers.remove(player);
 
         // Removes the player from the RadioSongPlayer so that it no longer hears the music
-        WITSNMain.getInstance().getSongManager().getRadioSongPlayer().removePlayer(player);
+        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().removePlayer(player);
 
         // Stop the game if there are no more players in it
         if (running && gamePlayers.isEmpty()) stopGame();

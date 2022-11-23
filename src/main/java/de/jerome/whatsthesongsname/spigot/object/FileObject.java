@@ -1,6 +1,6 @@
 package de.jerome.whatsthesongsname.spigot.object;
 
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,7 +17,7 @@ public class FileObject {
     /**
      * instance of your main class
      */
-    private static final JavaPlugin javaPlugin = WITSNMain.getInstance();
+    private static final JavaPlugin javaPlugin = WTSNMain.getInstance();
 
     /**
      * path to stream the file from this plugin ressource to servers plugin directory

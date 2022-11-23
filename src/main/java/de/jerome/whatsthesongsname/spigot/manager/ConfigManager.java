@@ -1,6 +1,6 @@
 package de.jerome.whatsthesongsname.spigot.manager;
 
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ConfigManager {
 
-    private static final FileConfiguration configYAML = WITSNMain.getInstance().getFileManager().getConfig().getFileConfiguration();
+    private static final FileConfiguration configYAML = WTSNMain.getInstance().getFileManager().getConfig().getFileConfiguration();
 
     // config.yml
     private String languagesDefault, bungeecordLobby, databaseHost, databaseDatabase, databaseUsername, databasePassword;

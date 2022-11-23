@@ -1,6 +1,6 @@
 package de.jerome.whatsthesongsname.spigot.manager;
 
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import de.jerome.whatsthesongsname.spigot.object.FileObject;
 import de.jerome.whatsthesongsname.spigot.object.Messages;
 import org.bukkit.ChatColor;
@@ -14,20 +14,20 @@ import java.util.Map;
 
 public class LanguagesManager {
 
-    private final List<String> isocodes;
+    private final List<String> localeCodes;
 
     /**
-     * HashMap<Isocode, HashMap<Path, Message>>
+     * HashMap<LocaleCode, HashMap<Path, Message>>
      */
     private final HashMap<String, HashMap<String, String>> languageMessages;
 
     /**
-     * HashMap<Isocode, HashMap<Path, List<Message>>>
+     * HashMap<LocaleCode, HashMap<Path, List<Message>>>
      */
     private final HashMap<String, HashMap<String, List<String>>> languageStringLists;
 
     public LanguagesManager() {
-        isocodes = new ArrayList<>();
+        localeCodes = new ArrayList<>();
         languageMessages = new HashMap<>();
         languageStringLists = new HashMap<>();
         reload();
@@ -37,15 +37,15 @@ public class LanguagesManager {
      * reloads the messages
      */
     public void reload() {
-        // Loads all isocodes
-        isocodes.clear();
-        isocodes.addAll(WITSNMain.getInstance().getConfigManager().getLanguagesLanguages());
+        // Loads all localeCodes
+        localeCodes.clear();
+        localeCodes.addAll(WTSNMain.getInstance().getConfigManager().getLanguagesLanguages());
 
         languageMessages.clear();
         languageStringLists.clear();
-        for (String isocode : isocodes) {
-            // Loads the FileObject of the isocode
-            FileObject fileObject = new FileObject(isocode + ".yml", "languages");
+        for (String localeCodes : localeCodes) {
+            // Loads the FileObject of the localeCodes
+            FileObject fileObject = new FileObject(localeCodes + ".yml", "languages");
 
             // Loads all messages
             HashMap<String, String> messages = new HashMap<>();
@@ -53,7 +53,7 @@ public class LanguagesManager {
                 if (!fileObject.getFileConfiguration().isString(entry.getKey())) continue;
                 messages.put(entry.getKey(), ChatColor.translateAlternateColorCodes('&', (String) entry.getValue()));
             }
-            languageMessages.put(isocode, messages);
+            languageMessages.put(localeCodes, messages);
 
             // Loads all StringLists (e.g. for Lore)
             HashMap<String, List<String>> stringLists = new HashMap<>();
@@ -63,28 +63,28 @@ public class LanguagesManager {
                 stringList.replaceAll(string -> ChatColor.translateAlternateColorCodes('&', string));
                 stringLists.put(entry.getKey(), stringList);
             }
-            languageStringLists.put(isocode, stringLists);
+            languageStringLists.put(localeCodes, stringLists);
         }
     }
 
     /**
-     * Get all isocodes
+     * Get all localeCodes
      *
-     * @return a copy of all isocodes
+     * @return a copy of all localeCodes
      */
-    public @NotNull List<String> getIsocodes() {
-        return new ArrayList<>(isocodes);
+    public @NotNull List<String> getLocaleCodes() {
+        return new ArrayList<>(localeCodes);
     }
 
     /**
      * Get a message in the correct language
      *
-     * @param isocode of the language
-     * @param path    of the message file
+     * @param localeCodes of the language
+     * @param path        of the message file
      * @return the message in the correct language
      */
-    public @NotNull String getMessage(@Nullable String isocode, @NotNull Messages path) {
-        HashMap<String, String> languageMessages = this.languageMessages.getOrDefault(isocode, this.languageMessages.get(WITSNMain.getInstance().getConfigManager().getLanguagesDefault()));
+    public @NotNull String getMessage(@Nullable String localeCodes, @NotNull Messages path) {
+        HashMap<String, String> languageMessages = this.languageMessages.getOrDefault(localeCodes, this.languageMessages.get(WTSNMain.getInstance().getConfigManager().getLanguagesDefault()));
         if (languageMessages == null) return "[" + path.getPath() + "]";
         String message = languageMessages.get(path.getPath());
         if (message == null) return "[" + path.getPath() + "]";
@@ -94,12 +94,12 @@ public class LanguagesManager {
     /**
      * Get a List<String> in the correct language
      *
-     * @param isocode of the language
-     * @param path    of the message file
+     * @param localeCodes of the language
+     * @param path        of the message file
      * @return the List<String> in the correct language
      */
-    public @NotNull List<String> getStringLists(@Nullable String isocode, @NotNull Messages path) {
-        HashMap<String, List<String>> languageStringLists = this.languageStringLists.getOrDefault(isocode, this.languageStringLists.get(WITSNMain.getInstance().getConfigManager().getLanguagesDefault()));
+    public @NotNull List<String> getStringLists(@Nullable String localeCodes, @NotNull Messages path) {
+        HashMap<String, List<String>> languageStringLists = this.languageStringLists.getOrDefault(localeCodes, this.languageStringLists.get(WTSNMain.getInstance().getConfigManager().getLanguagesDefault()));
         if (languageStringLists == null) return new ArrayList<>();
         List<String> stringList = languageStringLists.get(path.getPath());
         if (stringList == null) return new ArrayList<>();
