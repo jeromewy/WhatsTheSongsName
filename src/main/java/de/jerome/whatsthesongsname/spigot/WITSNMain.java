@@ -13,6 +13,7 @@ public class WITSNMain extends JavaPlugin {
     private static WITSNMain instance;
 
     private ConfigManager configManager;
+    private DatabaseManager databaseManager;
     private FileManager fileManager;
     private GameManager gameManager;
     private InventoryManager inventoryManager;
@@ -38,14 +39,18 @@ public class WITSNMain extends JavaPlugin {
     public void onDisable() {
         playerManager.saveAllPlayers();
 
-        if (!configManager.isDatabaseEnable())
-            fileManager.save();
+        if (configManager.isDatabaseEnable())
+            databaseManager.disconnect();
+        else fileManager.save();
     }
 
     public boolean reload() {
+        playerManager.saveAllPlayers();
+
         boolean success = fileManager.reload();
         if (success) {
             configManager.reload();
+            databaseManager.reload();
             inventoryManager.reload();
         }
         success = success && songManager.reload();
@@ -58,6 +63,7 @@ public class WITSNMain extends JavaPlugin {
         uuidFetcher = new UUIDFetcher();
         fileManager = new FileManager();
         configManager = new ConfigManager(); // FileManager
+        databaseManager = new DatabaseManager(); // FileManager, ConfigManager
         languagesManager = new LanguagesManager(); // FileManager
 
         vaultManager = new VaultManager(); // ConfigManager
@@ -78,6 +84,10 @@ public class WITSNMain extends JavaPlugin {
 
     public @NotNull ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public @NotNull DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 
     public @NotNull FileManager getFileManager() {

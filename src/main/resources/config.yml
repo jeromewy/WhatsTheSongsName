@@ -17,7 +17,6 @@ bungeecord:
   enable: false
   lobby: Lobby
 
-# currently not implemented!
 database:
   enable: false
   host: "127.0.0.1"
