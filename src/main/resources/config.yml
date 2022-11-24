@@ -12,7 +12,6 @@ languages:
     - en_us
     - de_de
 
-# currently not implemented!
 bungeecord:
   enable: false
   lobby: Lobby
