@@ -1,48 +1,44 @@
 package de.jerome.whatsthesongsname.spigot.manager;
 
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
-import de.jerome.whatsthesongsname.spigot.object.Messages;
-import org.bukkit.ChatColor;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ConfigManager {
 
-    private final FileConfiguration configYAML, messagesYAML;
+    private static final FileConfiguration configYAML = WTSNMain.getInstance().getFileManager().getConfig().getFileConfiguration();
 
     // config.yml
-    private String bungeecordLobby, databaseHost, databaseDatabase, databaseUsername, databasePassword;
+    private String languagesDefault, bungeecordLobby, databaseHost, databaseDatabase, databaseUsername, databasePassword;
     private int databasePort, musicPlayTime, choseTime, rewardCorrect, rewardWrong;
     private boolean rewardVault, bungeecordEnable, databaseEnable;
+    private List<String> languagesLanguages;
 
-    // messages.yml
-    private HashMap<String, String> messages;
-    private ArrayList<String> inventorySongItemsLore;
 
     public ConfigManager() {
-        this.configYAML = WITSNMain.getInstance().getFileManager().getConfig().getFileConfiguration();
-        this.messagesYAML = WITSNMain.getInstance().getFileManager().getMessages().getFileConfiguration();
         reload();
     }
 
     public void reload() {
         reloadConfig();
-        reloadMessages();
     }
 
+    /**
+     * reloads content of config.yml
+     */
     public void reloadConfig() {
-        // config.yml
         musicPlayTime = configYAML.getInt("musicPlayTime");
         choseTime = configYAML.getInt("choseTime");
 
         rewardVault = configYAML.getBoolean("reward.vault");
         rewardCorrect = configYAML.getInt("reward.correct");
         rewardWrong = configYAML.getInt("reward.wrong");
+
+        languagesDefault = configYAML.getString("languages.default");
+        languagesLanguages = configYAML.getStringList("languages.languages");
 
         bungeecordEnable = configYAML.getBoolean("bungeecord.enable");
         bungeecordLobby = configYAML.getString("bungeecord.lobby");
@@ -55,40 +51,27 @@ public class ConfigManager {
         databasePassword = configYAML.getString("database.password");
     }
 
-    public void reloadMessages() {
-        // messages.yml
-        this.messages = new HashMap<>();
-
-        for (Map.Entry<String, Object> entry : messagesYAML.getValues(true).entrySet()) {
-            if (!messagesYAML.isString(entry.getKey())) continue;
-            messages.put(entry.getKey(), ChatColor.translateAlternateColorCodes('&', (String) entry.getValue()));
-        }
-
-        inventorySongItemsLore = new ArrayList<>();
-        if (messagesYAML.isList(Messages.INVENTORY_SONG_ITEMS_LORE.getPath())) {
-            List<String> tempLore = messagesYAML.getStringList(Messages.INVENTORY_SONG_ITEMS_LORE.getPath());
-            for (String loreEntry : tempLore)
-                inventorySongItemsLore.add(ChatColor.translateAlternateColorCodes('&', loreEntry));
-        }
+    public String getLanguagesDefault() {
+        return languagesDefault;
     }
 
-    public @NotNull String getBungeecordLobby() {
+    public @Nullable String getBungeecordLobby() {
         return bungeecordLobby;
     }
 
-    public @NotNull String getDatabaseHost() {
+    public @Nullable String getDatabaseHost() {
         return databaseHost;
     }
 
-    public @NotNull String getDatabaseDatabase() {
+    public @Nullable String getDatabaseDatabase() {
         return databaseDatabase;
     }
 
-    public @NotNull String getDatabaseUsername() {
+    public @Nullable String getDatabaseUsername() {
         return databaseUsername;
     }
 
-    public @NotNull String getDatabasePassword() {
+    public @Nullable String getDatabasePassword() {
         return databasePassword;
     }
 
@@ -124,20 +107,7 @@ public class ConfigManager {
         return databaseEnable;
     }
 
-    public @NotNull String getMessage(@NotNull String path) {
-        String message = messages.get(path);
-        return message == null ? "null" : message;
-    }
-
-    public @NotNull String getMessage(@NotNull Messages path) {
-        return getMessage(path.getPath());
-    }
-
-    public @NotNull HashMap<String, String> getMessages() {
-        return messages;
-    }
-
-    public ArrayList<String> getInventorySongItemsLore() {
-        return new ArrayList<>(inventorySongItemsLore);
+    public @NotNull List<String> getLanguagesLanguages() {
+        return languagesLanguages;
     }
 }

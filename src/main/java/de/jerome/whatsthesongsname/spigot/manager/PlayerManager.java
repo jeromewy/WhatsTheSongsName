@@ -1,7 +1,7 @@
 package de.jerome.whatsthesongsname.spigot.manager;
 
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
-import de.jerome.whatsthesongsname.spigot.object.WITSNPlayer;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
+import de.jerome.whatsthesongsname.spigot.object.WTSNPlayer;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class PlayerManager {
 
-    private final HashMap<UUID, WITSNPlayer> players;
+    private final HashMap<UUID, WTSNPlayer> players;
 
     public PlayerManager() {
         players = new HashMap<>();
@@ -19,41 +19,41 @@ public class PlayerManager {
     }
 
     private void loadPlayers() {
-        for (String playerUUID : WITSNMain.getInstance().getFileManager().getPlayers().getFileConfiguration().getKeys(false))
+        for (String playerUUID : WTSNMain.getInstance().getFileManager().getPlayers().getFileConfiguration().getKeys(false))
             getPlayer(UUID.fromString(playerUUID));
     }
 
     public void saveAllPlayers() {
-        for (WITSNPlayer player : players.values()) player.save();
+        for (WTSNPlayer player : players.values()) player.save();
     }
 
-    public @Nullable WITSNPlayer getPlayer(@NotNull UUID uuid) {
+    public @Nullable WTSNPlayer getPlayer(@NotNull UUID uuid) {
         if (players.containsKey(uuid)) return players.get(uuid);
 
-        WITSNPlayer witsnPlayer = new WITSNPlayer(uuid);
-        players.put(uuid, witsnPlayer);
+        WTSNPlayer WTSNPlayer = new WTSNPlayer(uuid);
+        players.put(uuid, WTSNPlayer);
 
-        return witsnPlayer;
+        return WTSNPlayer;
     }
 
-    public @Nullable WITSNPlayer getPlayer(@NotNull OfflinePlayer offlinePlayer) {
+    public @Nullable WTSNPlayer getPlayer(@NotNull OfflinePlayer offlinePlayer) {
         if (players.containsKey(offlinePlayer.getUniqueId())) return players.get(offlinePlayer.getUniqueId());
 
-        WITSNPlayer witsnPlayer = new WITSNPlayer(offlinePlayer);
-        players.put(offlinePlayer.getUniqueId(), witsnPlayer);
+        WTSNPlayer WTSNPlayer = new WTSNPlayer(offlinePlayer);
+        players.put(offlinePlayer.getUniqueId(), WTSNPlayer);
 
-        return witsnPlayer;
+        return WTSNPlayer;
     }
 
-    public @Nullable WITSNPlayer getPlayer(@NotNull String name) {
-        UUID uuid = WITSNMain.getInstance().getUuidFetcher().getUUID(name);
+    public @Nullable WTSNPlayer getPlayer(@NotNull String name) {
+        UUID uuid = WTSNMain.getInstance().getUuidFetcher().getUUID(name);
         if (uuid == null) return null;
 
         if (players.containsKey(uuid)) return players.get(uuid);
 
-        WITSNPlayer witsnPlayer = new WITSNPlayer(uuid);
-        players.put(uuid, witsnPlayer);
+        WTSNPlayer WTSNPlayer = new WTSNPlayer(uuid);
+        players.put(uuid, WTSNPlayer);
 
-        return witsnPlayer;
+        return WTSNPlayer;
     }
 }

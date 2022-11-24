@@ -6,12 +6,17 @@ reward:
   correct: 10
   wrong: 5
 
+languages:
+  default: "en_us"
+  languages:
+    - en_us
+    - de_de
+
 # currently not implemented!
 bungeecord:
   enable: false
   lobby: Lobby
 
-# currently not implemented!
 database:
   enable: false
   host: "127.0.0.1"

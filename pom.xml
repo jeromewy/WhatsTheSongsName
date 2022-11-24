@@ -6,11 +6,23 @@
 
     <groupId>de.jerome.whatsthesongsname</groupId>
     <artifactId>spigot</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 
     <name>WhatsTheSongsName</name>
     <description>A song guessing game</description>
     <url>https://github.com/JeyVDW/WhatsTheSongsName</url>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/JeyVDW/WhatsTheSongsName/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
 
     <repositories>
         <repository>

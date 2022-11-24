@@ -1,0 +1,47 @@
+syntax:
+  info: "&9Du kannst die folgenden Befehle verwenden:"
+  join: "&8- &6/{commandName} join &8- &7Betritt das Spiel"
+  leave: "&8- &6/{commandName} leave &8- &7Verlasse das Spiel"
+  reload: "&8- &6/{commandName} reload &8- &7Lade die Songs und Configs neu"
+  stats:
+    own: "&8- &6/{commandName} stats &8- &7Zeige deine Stats"
+    other: "&8- &6/{commandName} stats [player] &8- &7Zeige die Stats eines Spielers"
+  noPermission: "&8- &cDu besitzt keine Rechte für Unterbefehle"
+info: |-
+  &bWhat's the song's name? &7ist ein Song rate Spiel von &6{pluginAuthors}
+  &8- &7Verwende &6/{commandName} help &7für Hilfe
+join:
+  alreadyInGame: "&cDu bist bereits im Spiel"
+  joined: "&aDu hast das Spiel erfolgreich betreten"
+leave:
+  notInGame: "&cDu bist nicht im Spiel"
+  left: "&aDu hast das Spiel erfolgreich verlassen"
+reload:
+  success: "&aAlle Dateien wurden erfolgreich neu geladen"
+  failed: "&cReload ist derzeit nicht implementiert. Starte deinen Server neu!"
+stats:
+  own: |-
+    &9Deine Stats:
+    &8- &6Punkte: &b{playerPoints}
+    &8- &6Richtig erratende Songs: &b{playerGuessedCorrectly}
+    &8- &6Falsch erratende Songs: &b{playerGuessedWrong}
+  other:
+    success: |-
+      &9Stats von &b{playerName}&9:
+      &8- &6Punkte: &b{playerPoints}
+      &8- &6Richtig erratende Songs: &b{playerGuessedCorrectly}
+      &8- &6Falsch erratende Songs: &b{playerGuessedWrong}
+    playerNotFound: "&cDer Spieler &b{playerName} &ckonnte nicht gefunden werden!"
+choseEvaluation:
+  songName: "&9Der Song hieß &b{songTitle} &9von &b{songAuthor}"
+  correctAnswer: "&aDeine Antwort war richtig!"
+  wrongAnswer: "&cDeine Antwort war falsch!"
+  noAnswer: "&cDu hast keine Antwort abgegeben!"
+submitAnswer: "&9Du hast den Song &b{songTitle} ausgewählt"
+inventory:
+  title: "Wähle den richtigen Titel:"
+  songItems:
+    displaynameColor: "6"
+    lore:
+      - "Autor:"
+      - "{songAuthor}"

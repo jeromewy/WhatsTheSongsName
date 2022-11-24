@@ -5,7 +5,7 @@ import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
-import de.jerome.whatsthesongsname.spigot.WITSNMain;
+import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class SongManager {
     private boolean firstTry = true;
 
     public SongManager() {
-        songsDirectory = new File(WITSNMain.getInstance().getDataFolder(), "songs");
+        songsDirectory = new File(WTSNMain.getInstance().getDataFolder(), "songs");
         songs = new ArrayList<>();
 
         load();
@@ -42,13 +42,13 @@ public class SongManager {
                     return load();
                 } else {
                     // Output on second try
-                    WITSNMain.getInstance().getLogger().log(Level.SEVERE, "Song list cannot be loaded, please delete the songs file");
+                    WTSNMain.getInstance().getLogger().log(Level.SEVERE, "Song list cannot be loaded, please delete the songs file");
                     return false;
                 }
 
         File[] files = songsDirectory.listFiles();
         if (files == null || files.length == 0) {
-            WITSNMain.getInstance().getLogger().log(Level.WARNING, "No songs could be found");
+            WTSNMain.getInstance().getLogger().log(Level.WARNING, "No songs could be found");
             return false;
         }
 
@@ -57,7 +57,7 @@ public class SongManager {
             // Check if the file is an .nbs file
             String[] split = songFile.getName().split("\\.");
             if (!split[split.length - 1].equals("nbs")) {
-                WITSNMain.getInstance().getLogger().log(Level.WARNING, "File " + songFile.getName() + " could not be loaded as a song");
+                WTSNMain.getInstance().getLogger().log(Level.WARNING, "File " + songFile.getName() + " could not be loaded as a song");
                 continue;
             }
 
@@ -66,7 +66,7 @@ public class SongManager {
         }
 
         if (songs.isEmpty()) {
-            WITSNMain.getInstance().getLogger().log(Level.WARNING, "No songs were found in the folder");
+            WTSNMain.getInstance().getLogger().log(Level.WARNING, "No songs were found in the folder");
             return true;
         }
 
