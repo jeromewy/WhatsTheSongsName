@@ -45,6 +45,7 @@ public class WTSNMain extends JavaPlugin {
     }
 
     public boolean reload() {
+        if (gameManager.isRunning()) gameManager.stopGame();
         playerManager.saveAllPlayers();
 
         boolean success = fileManager.reload();
