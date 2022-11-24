@@ -5,6 +5,7 @@ import de.jerome.whatsthesongsname.spigot.listener.InventoryListener;
 import de.jerome.whatsthesongsname.spigot.listener.PlayerListener;
 import de.jerome.whatsthesongsname.spigot.manager.*;
 import de.jerome.whatsthesongsname.spigot.util.UUIDFetcher;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +34,7 @@ public class WTSNMain extends JavaPlugin {
         makeInstances();
         registerCommands();
         registerListeners();
+        registerChannel();
     }
 
     @Override
@@ -42,6 +44,8 @@ public class WTSNMain extends JavaPlugin {
         if (configManager.isDatabaseEnable())
             databaseManager.disconnect();
         else fileManager.save();
+
+        Bukkit.getMessenger().unregisterOutgoingPluginChannel(this);
     }
 
     public boolean reload() {
@@ -66,7 +70,6 @@ public class WTSNMain extends JavaPlugin {
         configManager = new ConfigManager(); // FileManager
         databaseManager = new DatabaseManager(); // FileManager, ConfigManager
         languagesManager = new LanguagesManager(); // FileManager
-
         vaultManager = new VaultManager(); // ConfigManager
         playerManager = new PlayerManager(); // ConfigManager
         inventoryManager = new InventoryManager(); // ConfigManager
@@ -81,6 +84,10 @@ public class WTSNMain extends JavaPlugin {
     private void registerListeners() {
         new InventoryListener();
         new PlayerListener();
+    }
+
+    private void registerChannel() {
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
     public @NotNull ConfigManager getConfigManager() {

@@ -1,5 +1,7 @@
 package de.jerome.whatsthesongsname.spigot.command;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import de.jerome.whatsthesongsname.spigot.manager.LanguagesManager;
 import de.jerome.whatsthesongsname.spigot.object.Messages;
@@ -90,6 +92,12 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
                 }
 
                 commandSender.sendMessage(languagesManager.getMessage(localeCode, Messages.JOIN_JOINED));
+
+                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF("Connect");
+                out.writeUTF(WTSNMain.getInstance().getConfigManager().getBungeecordLobby());
+
+                player.sendPluginMessage(WTSNMain.getInstance(), "BungeeCord", out.toByteArray());
                 return true;
             }
 
