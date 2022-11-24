@@ -42,6 +42,9 @@ public class WITSNMain extends JavaPlugin {
     }
 
     public boolean reload() {
+        if (gameManager.isRunning()) gameManager.stopGame();
+        playerManager.saveAllPlayers();
+
         boolean success = fileManager.reload();
         if (success) {
             configManager.reload();

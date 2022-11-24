@@ -54,13 +54,13 @@ public class GameManager {
             WITSNMain.getInstance().getLogger().log(Level.WARNING, "At least 4 songs are required for the game to start. Please add more!");
     }
 
-    private void startGame() {
+    public void startGame() {
         if (!ready) return;
         running = true;
         startMusic();
     }
 
-    private void stopGame() {
+    public void stopGame() {
         running = false;
         stopMusic();
     }
