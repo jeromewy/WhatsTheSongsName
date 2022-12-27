@@ -6,7 +6,7 @@
 
     <groupId>de.jerome.whatsthesongsname</groupId>
     <artifactId>spigot</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <name>WhatsTheSongsName</name>
     <description>A song guessing game</description>
