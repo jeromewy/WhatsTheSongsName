@@ -31,6 +31,8 @@ public class SongManager {
     }
 
     private boolean load() {
+        songs.clear();
+
         // create the sounds folder if it doesn't exist
         if (!songsDirectory.mkdirs())
             // if it existed, it is checked whether it is a folder

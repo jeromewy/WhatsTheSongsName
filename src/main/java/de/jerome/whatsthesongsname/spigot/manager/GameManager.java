@@ -35,13 +35,7 @@ public class GameManager {
     }
 
     public void reload() {
-        running = false;
-        allowInventoryClose = false;
-
-        if (stopMusicTask != null) {
-            stopMusicTask.cancel();
-            stopMusicTask = null;
-        }
+        stopGame();
 
         if (songManager.getPlaylist() == null || songManager.getRadioSongPlayer() == null) {
             ready = false;
@@ -63,6 +57,15 @@ public class GameManager {
 
     public void stopGame() {
         running = false;
+        allowInventoryClose = false;
+        gamePlayers.clear();
+        playerAnswers.clear();
+
+        if (stopMusicTask != null) {
+            stopMusicTask.cancel();
+            stopMusicTask = null;
+        }
+
         stopMusic();
     }
 
@@ -82,6 +85,8 @@ public class GameManager {
     private void autoStopMusic() {
         // Pauses song playback after a variable number of seconds
         stopMusicTask = Bukkit.getScheduler().runTaskLater(WTSNMain.getInstance(), () -> {
+            if (!running) return;
+
             // stops the music
             stopMusic();
 
