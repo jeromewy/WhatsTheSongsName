@@ -9,7 +9,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 public class GameManager {
@@ -20,7 +23,6 @@ public class GameManager {
 
     private final ArrayList<Player> gamePlayers;
     private final HashMap<Player, String> playerAnswers;
-    private final Random random;
     private boolean ready, running, allowInventoryClose;
 
     private BukkitTask stopMusicTask;
@@ -29,7 +31,6 @@ public class GameManager {
     public GameManager() {
         gamePlayers = new ArrayList<>();
         playerAnswers = new HashMap<>();
-        random = new Random();
 
         reload();
     }
@@ -110,17 +111,9 @@ public class GameManager {
         List<Song> songs = WTSNMain.getInstance().getSongManager().getPlaylist().getSongList();
 
         // Iterates through the "songs" list and randomly adds 3 more to "chooseTitles"
+        Collections.shuffle(songs);
         for (int i = 0; i < 3; i++) {
-            Song title = songs.get(random.nextInt(songs.size() - 1));
-
-            // If the title has already been added, a new attempt will be made
-            if (choseSongs.contains(title)) {
-                i--;
-                continue;
-            }
-
-            // Adds the song to the selection
-            choseSongs.add(title);
+            choseSongs.add(songs.get(i));
         }
 
         // Shuffles the selection so that the first item is not always the right one

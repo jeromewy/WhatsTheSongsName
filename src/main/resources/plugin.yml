@@ -16,6 +16,28 @@ website: https://github.com/JeyVDW
 commands:
   whatsthesongsname:
     description: Main command
-    usage: /whatsthesongsname
+    usage: /<command> help
     aliases:
       - wtsn
+
+permissions:
+  wtsn.*:
+    description: Main permission
+    default: op
+    children:
+      wtsn.join:
+        description: Permission to join the game
+        default: op
+      wtsn.leave:
+        description: Permission to leave the game
+        default: op
+      wtsn.reload:
+        description: Permission to reload the plugin
+        default: op
+      wtsn.stats:
+        description: Permission to view the stats
+        default: op
+        children:
+          wtsn.stats.others:
+            description: Permission to view the stats of others
+            default: op
