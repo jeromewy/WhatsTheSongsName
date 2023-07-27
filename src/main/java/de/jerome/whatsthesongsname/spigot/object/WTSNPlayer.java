@@ -126,8 +126,14 @@ public class WTSNPlayer {
     public void addGuessedCorrectly() {
         addPoints(20);
 
+        // command reward
+        if (WTSNMain.getInstance().getConfigManager().isRewardCommandEnabled())
+            for (String command : WTSNMain.getInstance().getConfigManager().getRewardCommandCorrect())
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%playerName%", getName()));
+
+        // vault reward
         if (vaultManager.isEconomyEnabled())
-            vaultManager.getEconomy().depositPlayer(offlinePlayer, WTSNMain.getInstance().getConfigManager().getRewardCorrect());
+            vaultManager.getEconomy().depositPlayer(offlinePlayer, WTSNMain.getInstance().getConfigManager().getRewardVaultCorrect());
 
         this.guessedCorrectly++;
     }
@@ -139,8 +145,14 @@ public class WTSNPlayer {
     public void addGuessedWrong() {
         removePoints(5);
 
+        // command reward
+        if (WTSNMain.getInstance().getConfigManager().isRewardCommandEnabled())
+            for (String command : WTSNMain.getInstance().getConfigManager().getRewardCommandWrong())
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%playerName%", getName()));
+
+        // vault reward
         if (vaultManager.isEconomyEnabled())
-            vaultManager.getEconomy().withdrawPlayer(offlinePlayer, WTSNMain.getInstance().getConfigManager().getRewardWrong());
+            vaultManager.getEconomy().withdrawPlayer(offlinePlayer, WTSNMain.getInstance().getConfigManager().getRewardVaultWrong());
 
         this.guessedWrong++;
     }

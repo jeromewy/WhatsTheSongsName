@@ -14,7 +14,7 @@ public class VaultManager {
     private Economy economy;
 
     public VaultManager() {
-        if (!WTSNMain.getInstance().getConfigManager().isRewardVault()) {
+        if (!WTSNMain.getInstance().getConfigManager().isRewardVaultEnabled()) {
             economyEnabled = false;
             return;
         }

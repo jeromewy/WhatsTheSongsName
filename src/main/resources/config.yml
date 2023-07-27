@@ -2,9 +2,16 @@ musicPlayTime: 30
 choseTime: 15
 
 reward:
-  vault: false
-  correct: 10
-  wrong: 5
+  vault:
+    enabled: false
+    correct: 10
+    wrong: 5
+  command:
+    enabled: false
+    correct:
+      - "give %playerName% diamond 1"
+    wrong:
+      - "give %playerName% dirt 1"
 
 languages:
   default: "en_us"
