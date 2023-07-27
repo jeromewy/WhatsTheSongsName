@@ -29,14 +29,6 @@ public class WTSNPlayer {
         reload();
     }
 
-    public WTSNPlayer(UUID uuid, String name) {
-        this.uuid = uuid;
-        offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-        this.name = name;
-
-        reload();
-    }
-
     public WTSNPlayer(OfflinePlayer offlinePlayer) {
         uuid = offlinePlayer.getUniqueId();
         this.offlinePlayer = offlinePlayer;
