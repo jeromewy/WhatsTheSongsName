@@ -13,9 +13,9 @@ public class ConfigManager {
 
     // config.yml
     private String languagesDefault, bungeecordLobby, databaseHost, databaseDatabase, databaseUsername, databasePassword;
-    private int databasePort, musicPlayTime, choseTime, rewardCorrect, rewardWrong;
-    private boolean rewardVault, bungeecordEnable, databaseEnable;
-    private List<String> languagesLanguages;
+    private int databasePort, musicPlayTime, choseTime, rewardVaultCorrect, rewardVaultWrong;
+    private boolean rewardCommandEnabled, rewardVaultEnabled, bungeecordEnable, databaseEnable;
+    private List<String> languagesLanguages, rewardCommandCorrect, rewardCommandWrong;
 
 
     public ConfigManager() {
@@ -33,9 +33,13 @@ public class ConfigManager {
         musicPlayTime = configYAML.getInt("musicPlayTime");
         choseTime = configYAML.getInt("choseTime");
 
-        rewardVault = configYAML.getBoolean("reward.vault");
-        rewardCorrect = configYAML.getInt("reward.correct");
-        rewardWrong = configYAML.getInt("reward.wrong");
+        rewardCommandEnabled = configYAML.getBoolean("reward.command.enabled");
+        rewardCommandCorrect = configYAML.getStringList("reward.command.correct");
+        rewardCommandWrong = configYAML.getStringList("reward.command.wrong");
+
+        rewardVaultEnabled = configYAML.getBoolean("reward.vault.enabled");
+        rewardVaultCorrect = configYAML.getInt("reward.vault.correct");
+        rewardVaultWrong = configYAML.getInt("reward.vault.wrong");
 
         languagesDefault = configYAML.getString("languages.default");
         languagesLanguages = configYAML.getStringList("languages.languages");
@@ -87,16 +91,16 @@ public class ConfigManager {
         return choseTime;
     }
 
-    public int getRewardCorrect() {
-        return rewardCorrect;
+    public int getRewardVaultCorrect() {
+        return rewardVaultCorrect;
     }
 
-    public int getRewardWrong() {
-        return rewardWrong;
+    public int getRewardVaultWrong() {
+        return rewardVaultWrong;
     }
 
-    public boolean isRewardVault() {
-        return rewardVault;
+    public boolean isRewardVaultEnabled() {
+        return rewardVaultEnabled;
     }
 
     public boolean isBungeecordEnable() {
@@ -107,7 +111,19 @@ public class ConfigManager {
         return databaseEnable;
     }
 
+    public boolean isRewardCommandEnabled() {
+        return rewardCommandEnabled;
+    }
+
     public @NotNull List<String> getLanguagesLanguages() {
         return languagesLanguages;
+    }
+
+    public @NotNull List<String> getRewardCommandCorrect() {
+        return rewardCommandCorrect;
+    }
+
+    public @NotNull List<String> getRewardCommandWrong() {
+        return rewardCommandWrong;
     }
 }
