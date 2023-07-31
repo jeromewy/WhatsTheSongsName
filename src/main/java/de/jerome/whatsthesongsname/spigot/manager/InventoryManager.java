@@ -59,16 +59,19 @@ public class InventoryManager {
     private void updateChoseItem(int slot, Song song) {
         for (Map.Entry<String, Inventory> entry : choseInventories.entrySet()) {
             ItemStack itemStack = entry.getValue().getItem(slot);
+            if (itemStack == null) continue;
             ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName(ChatColor.getByChar(languagesManager.getMessage(entry.getKey(), Messages.INVENTORY_SONG_ITEMS_DISPLAYNAME_COLOR)) + song.getTitle());
+            if (itemMeta != null) {
+                itemMeta.setDisplayName(ChatColor.getByChar(languagesManager.getMessage(entry.getKey(), Messages.INVENTORY_SONG_ITEMS_DISPLAYNAME_COLOR)) + song.getTitle());
 
-            List<String> lore = new ArrayList<>();
-            for (String loreEntry : WTSNMain.getInstance().getLanguagesManager().getStringLists(entry.getKey(), Messages.INVENTORY_SONG_ITEMS_LORE))
-                lore.add(loreEntry.replaceAll("\\{songTitle}", song.getTitle())
-                        .replaceAll("\\{songAuthor}", song.getAuthor()));
-            itemMeta.setLore(lore);
+                List<String> lore = new ArrayList<>();
+                for (String loreEntry : WTSNMain.getInstance().getLanguagesManager().getStringLists(entry.getKey(), Messages.INVENTORY_SONG_ITEMS_LORE))
+                    lore.add(loreEntry.replaceAll("\\{songTitle}", song.getTitle())
+                            .replaceAll("\\{songAuthor}", song.getAuthor()));
+                itemMeta.setLore(lore);
 
-            itemStack.setItemMeta(itemMeta);
+                itemStack.setItemMeta(itemMeta);
+            }
         }
     }
 
@@ -77,9 +80,11 @@ public class InventoryManager {
         itemStack.setAmount(1);
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(" ");
-        itemMeta.setLore(new ArrayList<>());
-        itemStack.setItemMeta(itemMeta);
+        if (itemMeta != null) {
+            itemMeta.setDisplayName(" ");
+            itemMeta.setLore(new ArrayList<>());
+            itemStack.setItemMeta(itemMeta);
+        }
 
         return itemStack;
     }

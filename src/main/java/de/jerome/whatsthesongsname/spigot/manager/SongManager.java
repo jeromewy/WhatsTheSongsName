@@ -40,7 +40,7 @@ public class SongManager {
                 // once an attempt is made to delete it and then create it again
                 if (firstTry) {
                     firstTry = false;
-                    songsDirectory.delete();
+                    if (!songsDirectory.delete()) return false;
                     return load();
                 } else {
                     // Output on second try
@@ -50,7 +50,7 @@ public class SongManager {
 
         File[] files = songsDirectory.listFiles();
         if (files == null || files.length == 0) {
-            WTSNMain.getInstance().getLogger().log(Level.WARNING, "No songs could be found");
+            WTSNMain.getInstance().getLogger().log(Level.WARNING, "No songs were found in the folder");
             return false;
         }
 

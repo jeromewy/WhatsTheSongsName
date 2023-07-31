@@ -3,6 +3,7 @@ package de.jerome.whatsthesongsname.spigot.manager;
 import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import de.jerome.whatsthesongsname.spigot.object.WTSNPlayer;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -32,6 +33,15 @@ public class PlayerManager {
 
         WTSNPlayer WTSNPlayer = new WTSNPlayer(uuid);
         players.put(uuid, WTSNPlayer);
+
+        return WTSNPlayer;
+    }
+
+    public @NotNull WTSNPlayer getPlayer(@NotNull Player player) {
+        if (players.containsKey(player.getUniqueId())) return players.get(player.getUniqueId());
+
+        WTSNPlayer WTSNPlayer = new WTSNPlayer(player);
+        players.put(player.getUniqueId(), WTSNPlayer);
 
         return WTSNPlayer;
     }
