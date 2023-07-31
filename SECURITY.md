@@ -18,4 +18,4 @@ The plugin always supports the latest Minecraft version. Currently, no attention
 
 ## Reporting a Vulnerability
 
-Please create an [Issue](https://github.com/JeyVDW/WhatsTheSongsName/issues) if you find a vulnerability. I will try to fix it as soon as possible.
+Please create a private security vulnerability [here](https://github.com/JeyVDW/WhatsTheSongsName/security/advisories) so I can fix it as soon as possible. More information about this is available in the GitHub docs at [Privately reporting a security vulnerability](https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability).
