@@ -3,7 +3,7 @@ prefix: WTSN
 description: A song guessing game
 
 main: de.jerome.whatsthesongsname.spigot.WTSNMain
-version: 1.0.5
+version: 1.0.6
 api-version: 1.20
 depend:
   - NoteBlockAPI
@@ -25,11 +25,8 @@ permissions:
     description: Main permission
     default: op
     children:
-      wtsn.join:
-        description: Permission to join the game
-        default: op
-      wtsn.leave:
-        description: Permission to leave the game
+      wtsn.play:
+        description: Permission to play the game
         default: op
       wtsn.reload:
         description: Permission to reload the plugin
