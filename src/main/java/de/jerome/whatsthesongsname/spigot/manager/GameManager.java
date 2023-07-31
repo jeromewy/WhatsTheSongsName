@@ -1,6 +1,8 @@
 package de.jerome.whatsthesongsname.spigot.manager;
 
+import com.xxmicloxx.NoteBlockAPI.model.Playlist;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
+import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import de.jerome.whatsthesongsname.spigot.WTSNMain;
 import de.jerome.whatsthesongsname.spigot.object.Messages;
 import org.bukkit.Bukkit;
@@ -71,16 +73,22 @@ public class GameManager {
     }
 
     private void startMusic() {
-        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().setPlaying(true);
+        RadioSongPlayer radioSongPlayer = WTSNMain.getInstance().getSongManager().getRadioSongPlayer();
+        if (radioSongPlayer == null) return;
+
+        radioSongPlayer.setPlaying(true);
         autoStopMusic();
     }
 
     private void stopMusic() {
+        RadioSongPlayer radioSongPlayer = WTSNMain.getInstance().getSongManager().getRadioSongPlayer();
+        if (radioSongPlayer == null) return;
+
         // Pause song playback
-        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().setPlaying(false);
+        radioSongPlayer.setPlaying(false);
 
         // Selects the next song
-        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().playNextSong();
+        radioSongPlayer.playNextSong();
     }
 
     private void autoStopMusic() {
@@ -105,10 +113,14 @@ public class GameManager {
         List<Song> choseSongs = new ArrayList<>();
 
         // The correct title is added
-        choseSongs.add(WTSNMain.getInstance().getSongManager().getRadioSongPlayer().getSong());
+        RadioSongPlayer radioSongPlayer = WTSNMain.getInstance().getSongManager().getRadioSongPlayer();
+        if (radioSongPlayer == null) return;
+        choseSongs.add(radioSongPlayer.getSong());
 
         // List of all songs so that some of them can be randomly added to the inventory
-        List<Song> songs = WTSNMain.getInstance().getSongManager().getPlaylist().getSongList();
+        Playlist playlist = WTSNMain.getInstance().getSongManager().getPlaylist();
+        if (playlist == null) return;
+        List<Song> songs = playlist.getSongList();
 
         // Iterates through the "songs" list and randomly adds 3 more to "chooseTitles"
         Collections.shuffle(songs);
@@ -131,7 +143,10 @@ public class GameManager {
     }
 
     private void evaluateChoosing() {
-        Song song = WTSNMain.getInstance().getSongManager().getRadioSongPlayer().getSong();
+        // Gets the correct song
+        RadioSongPlayer radioSongPlayer = WTSNMain.getInstance().getSongManager().getRadioSongPlayer();
+        if (radioSongPlayer == null) return;
+        Song song = radioSongPlayer.getSong();
 
         // So that the inventory is not reopened by the InventoryCloseEvent
         allowInventoryClose = true;
@@ -196,7 +211,9 @@ public class GameManager {
         gamePlayers.add(player);
 
         // Adds the player to the RadioSongPlayer
-        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().addPlayer(player);
+        RadioSongPlayer radioSongPlayer = WTSNMain.getInstance().getSongManager().getRadioSongPlayer();
+        if (radioSongPlayer == null) return false;
+        radioSongPlayer.addPlayer(player);
 
         // Starts the game if it's not already started
         if (!running) startGame();
@@ -218,7 +235,9 @@ public class GameManager {
         playerAnswers.remove(player);
 
         // Removes the player from the RadioSongPlayer so that it no longer hears the music
-        WTSNMain.getInstance().getSongManager().getRadioSongPlayer().removePlayer(player);
+        RadioSongPlayer radioSongPlayer = WTSNMain.getInstance().getSongManager().getRadioSongPlayer();
+        if (radioSongPlayer == null) return false;
+        radioSongPlayer.removePlayer(player);
 
         // Stop the game if there are no more players in it
         if (running && gamePlayers.isEmpty()) stopGame();

@@ -23,12 +23,7 @@ public class InventoryListener implements Listener {
     public void handleInventoryDrag(InventoryDragEvent event) {
         // Checks if this is the ChoseInventory
         boolean choseInventory = false;
-        int hashCode = event.getInventory().hashCode();
-        for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
-            if (hashCode == inventory.hashCode()) {
-                choseInventory = true;
-                break;
-            }
+        choseInventory = isChoseInventory(event.getInventory(), choseInventory);
 
         if (!choseInventory) return;
 
@@ -42,12 +37,7 @@ public class InventoryListener implements Listener {
 
         // Checks if this is the ChoseInventory
         boolean choseInventory = false;
-        int hashCode = event.getInventory().hashCode();
-        for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
-            if (hashCode == inventory.hashCode()) {
-                choseInventory = true;
-                break;
-            }
+        choseInventory = isChoseInventory(event.getInventory(), choseInventory);
 
         if (!choseInventory) return;
 
@@ -56,6 +46,7 @@ public class InventoryListener implements Listener {
         ItemStack currentItem = event.getCurrentItem();
         if (currentItem == null) return;
 
+        if (currentItem.getItemMeta() == null) return;
         String displayName = ChatColor.stripColor(currentItem.getItemMeta().getDisplayName());
         // Checks whether it is a placeholder item
         if (displayName.isEmpty() || displayName.isBlank()) return;
@@ -75,12 +66,7 @@ public class InventoryListener implements Listener {
 
         // Checks if this is the ChoseInventory
         boolean choseInventory = false;
-        int hashCode = event.getInventory().hashCode();
-        for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
-            if (hashCode == inventory.hashCode()) {
-                choseInventory = true;
-                break;
-            }
+        choseInventory = isChoseInventory(event.getInventory(), choseInventory);
 
         if (!choseInventory) return;
 
@@ -88,6 +74,16 @@ public class InventoryListener implements Listener {
         if (!WTSNMain.getInstance().getGameManager().getPlayerAnswers().containsKey(player)
                 && !WTSNMain.getInstance().getGameManager().isAllowInventoryClose())
             Bukkit.getScheduler().runTask(WTSNMain.getInstance(), () -> player.openInventory(event.getInventory()));
+    }
+
+    private boolean isChoseInventory(Inventory event, boolean choseInventory) {
+        int hashCode = event.hashCode();
+        for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
+            if (hashCode == inventory.hashCode()) {
+                choseInventory = true;
+                break;
+            }
+        return choseInventory;
     }
 
 }

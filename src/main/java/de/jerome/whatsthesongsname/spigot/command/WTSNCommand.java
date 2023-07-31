@@ -30,6 +30,7 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
 
     public WTSNCommand() {
         PluginCommand pluginCommand = WTSNMain.getInstance().getCommand("whatsthesongsname");
+        if (pluginCommand == null) return;
         pluginCommand.setExecutor(this);
         pluginCommand.setTabCompleter(this);
     }
@@ -51,13 +52,13 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
             if (args[0].equalsIgnoreCase("join")) {
                 // Does he have the permissions?
                 if (!commandSender.hasPermission("wtsn.play")) {
-                    sendSyntaxMessage(commandSender, command, commandName, args);
+                    sendSyntaxMessage(commandSender, commandName);
                     return true;
                 }
 
                 // Is he a player?
                 if (!(commandSender instanceof Player player)) {
-                    sendSyntaxMessage(commandSender, command, commandName, args);
+                    sendSyntaxMessage(commandSender, commandName);
                     return true;
                 }
 
@@ -75,13 +76,13 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
             if (args[0].equalsIgnoreCase("leave")) {
                 // Does he have the permissions?
                 if (!commandSender.hasPermission("wtsn.play")) {
-                    sendSyntaxMessage(commandSender, command, commandName, args);
+                    sendSyntaxMessage(commandSender, commandName);
                     return true;
                 }
 
                 // Is he a player?
                 if (!(commandSender instanceof Player player)) {
-                    sendSyntaxMessage(commandSender, command, commandName, args);
+                    sendSyntaxMessage(commandSender, commandName);
                     return true;
                 }
 
@@ -93,7 +94,7 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
 
                 commandSender.sendMessage(languagesManager.getMessage(localeCode, Messages.LEAVE_LEFT));
 
-                if (WTSNMain.getInstance().getConfigManager().isBungeecordEnable()) {
+                if (WTSNMain.getInstance().getConfigManager().isBungeecordEnable() && WTSNMain.getInstance().getConfigManager().getBungeecordLobby() != null) {
                     ByteArrayDataOutput out = ByteStreams.newDataOutput();
                     out.writeUTF("Connect");
                     out.writeUTF(WTSNMain.getInstance().getConfigManager().getBungeecordLobby());
@@ -105,7 +106,7 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
             if (args[0].equalsIgnoreCase("reload")) {
                 // Does he have the permissions?
                 if (!commandSender.hasPermission("wtsn.reload")) {
-                    sendSyntaxMessage(commandSender, command, commandName, args);
+                    sendSyntaxMessage(commandSender, commandName);
                     return true;
                 }
 
@@ -120,13 +121,13 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
             if (args[0].equalsIgnoreCase("stats")) {
                 // Does he have the permissions?
                 if (!commandSender.hasPermission("wtsn.stats")) {
-                    sendSyntaxMessage(commandSender, command, commandName, args);
+                    sendSyntaxMessage(commandSender, commandName);
                     return true;
                 }
 
                 // Is he a player?
                 if (!(commandSender instanceof Player player)) {
-                    sendSyntaxMessage(commandSender, command, commandName, args);
+                    sendSyntaxMessage(commandSender, commandName);
                     return true;
                 }
 
@@ -145,7 +146,7 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
             if (args[0].equalsIgnoreCase("stats")) {
                 // Does he have the permissions?
                 if (!commandSender.hasPermission("wtsn.stats.other")) {
-                    sendSyntaxMessage(commandSender, command, commandName, args);
+                    sendSyntaxMessage(commandSender, commandName);
                     return true;
                 }
 
@@ -168,7 +169,7 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
             }
         }
 
-        sendSyntaxMessage(commandSender, command, commandName, args);
+        sendSyntaxMessage(commandSender, commandName);
         return true;
     }
 
@@ -204,7 +205,7 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
         return tab;
     }
 
-    private void sendSyntaxMessage(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String commandName, @NotNull String[] args) {
+    private void sendSyntaxMessage(@NotNull CommandSender commandSender, @NotNull String commandName) {
         String localeCode = null;
         boolean player = false;
         if (commandSender instanceof Player tempPlayer) {
