@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -15,13 +15,6 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class UUIDFetcher {
-
-    /**
-     * Date when name changes were introduced
-     *
-     * @see UUIDFetcher#getUUIDAt(String, long)
-     */
-    public static final long FEBRUARY_2015 = 1422748800000L;
 
     private static final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
 
@@ -72,7 +65,6 @@ public class UUIDFetcher {
      *
      * @param name      The name
      * @param timestamp Time when the player had this name in milliseconds
-     * @see UUIDFetcher#FEBRUARY_2015
      */
     public UUID getUUIDAt(String name, long timestamp) {
         name = name.toLowerCase();
@@ -80,7 +72,8 @@ public class UUIDFetcher {
             return uuidCache.get(name);
         }
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(String.format(UUID_URL, name, timestamp / 1000)).openConnection();
+
+            HttpURLConnection connection = (HttpURLConnection) URI.create(String.format(UUID_URL, name, timestamp / 1000)).toURL().openConnection();
             connection.setReadTimeout(5000);
             UUIDFetcher data = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), UUIDFetcher.class);
 
@@ -89,10 +82,8 @@ public class UUIDFetcher {
 
             return data.id;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     /**
@@ -116,7 +107,7 @@ public class UUIDFetcher {
             return nameCache.get(uuid);
         }
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(String.format(NAME_URL, UUIDTypeAdapter.fromUUID(uuid))).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) URI.create(String.format(NAME_URL, UUIDTypeAdapter.fromUUID(uuid))).toURL().openConnection();
             connection.setReadTimeout(5000);
             UUIDFetcher[] nameHistory = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), UUIDFetcher[].class);
             UUIDFetcher currentNameData = nameHistory[nameHistory.length - 1];
@@ -126,9 +117,7 @@ public class UUIDFetcher {
 
             return currentNameData.name;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 }

@@ -75,30 +75,28 @@ public class FileObject {
 
     /**
      * create the file or copy it from the resource if it exists
-     *
-     * @return true = if success; false = everything else
      */
-    private boolean createFile() {
+    private void createFile() {
         if (!file.getParentFile().exists())
-            file.getParentFile().mkdirs();
+            if (!file.getParentFile().mkdirs()) {
+                System.out.println("Could not create directory: " + file.getParentFile().getPath());
+                return;
+            }
 
         InputStream inputStream = javaPlugin.getResource(fileStreamPath);
         if (inputStream != null) {
             try {
                 Files.copy(inputStream, file.toPath());
             } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+                throw new RuntimeException(e);
             }
-            return true;
+            return;
         }
 
         try {
-            file.createNewFile();
-            return true;
+            if (!file.createNewFile()) System.out.println("Could not create file: " + file.getPath());
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -123,8 +121,7 @@ public class FileObject {
             fileConfiguration = YamlConfiguration.loadConfiguration(file);
             return true;
         } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -143,8 +140,7 @@ public class FileObject {
             fileConfiguration.save(file);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
     }
 

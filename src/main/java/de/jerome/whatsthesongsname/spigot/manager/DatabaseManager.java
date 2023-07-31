@@ -23,34 +23,32 @@ public class DatabaseManager {
         checkTables();
     }
 
-    public boolean connect() {
+    public void connect() {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + configManager.getDatabaseHost() + ":" + configManager.getDatabasePort() + "/" + configManager.getDatabaseDatabase(), configManager.getDatabaseUsername(), configManager.getDatabasePassword());
-            return true;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            return false;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public boolean disconnect() {
+    public void disconnect() {
         try {
-            if (connection == null) return true;
+            if (connection == null) return;
             connection.close();
             connection = null;
             statement = null;
-            return true;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
     public void checkTables() {
         try {
-            getStatement().executeUpdate("CREATE TABLE IF NOT EXISTS wtsn_players (UUID VARCHAR (37), POINTS INT, GUESSED_CORRECTLY INT, GUESSED_WRONG INT, PRIMARY KEY (UUID))");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            Statement statement = getStatement();
+            if (statement == null) return;
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS wtsn_players (UUID VARCHAR (37), POINTS INT, GUESSED_CORRECTLY INT, GUESSED_WRONG INT, PRIMARY KEY (UUID))");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -59,17 +57,19 @@ public class DatabaseManager {
             if (configManager.isDatabaseEnable())
                 if (connection == null || connection.isClosed() || !connection.isValid(2))
                     connect();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return connection;
     }
 
     public @Nullable Statement getStatement() {
         try {
-            statement = getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            Connection connection = getConnection();
+            if (connection == null) return null;
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return statement;
     }
