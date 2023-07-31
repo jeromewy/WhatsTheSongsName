@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -40,13 +41,16 @@ public class WTSNPlayer {
     public void reload() {
         if (WTSNMain.getInstance().getConfigManager().isDatabaseEnable()) {
             try {
-                ResultSet resultSet = WTSNMain.getInstance().getDatabaseManager().getStatement().executeQuery("SELECT * FROM wtsn_players WHERE UUID = '" + uuid + "'");
-                if (resultSet.next()) {
-                    points = resultSet.getInt("POINTS");
-                    guessedCorrectly = resultSet.getInt("GUESSED_CORRECTLY");
-                    guessedWrong = resultSet.getInt("GUESSED_WRONG");
-                } else
-                    WTSNMain.getInstance().getDatabaseManager().getStatement().executeUpdate("INSERT INTO wtsn_players (UUID, POINTS, GUESSED_CORRECTLY, GUESSED_WRONG) VALUES ('" + uuid + "', " + points + ", " + guessedCorrectly + ", " + guessedCorrectly + ")");
+                Statement statement = WTSNMain.getInstance().getDatabaseManager().getStatement();
+                if (statement == null) return;
+                try (ResultSet resultSet = statement.executeQuery("SELECT * FROM wtsn_players WHERE UUID = '" + uuid + "'")) {
+                    if (resultSet.next()) {
+                        points = resultSet.getInt("POINTS");
+                        guessedCorrectly = resultSet.getInt("GUESSED_CORRECTLY");
+                        guessedWrong = resultSet.getInt("GUESSED_WRONG");
+                    } else
+                        WTSNMain.getInstance().getDatabaseManager().getStatement().executeUpdate("INSERT INTO wtsn_players (UUID, POINTS, GUESSED_CORRECTLY, GUESSED_WRONG) VALUES ('" + uuid + "', " + points + ", " + guessedCorrectly + ", " + guessedCorrectly + ")");
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -60,14 +64,17 @@ public class WTSNPlayer {
     public void save() {
         if (WTSNMain.getInstance().getConfigManager().isDatabaseEnable()) {
             try {
-                ResultSet resultSet = WTSNMain.getInstance().getDatabaseManager().getStatement().executeQuery("SELECT * FROM wtsn_players WHERE UUID = '" + uuid + "'");
-                if (resultSet.next()) {
-                    resultSet.updateInt("POINTS", points);
-                    resultSet.updateInt("GUESSED_CORRECTLY", guessedCorrectly);
-                    resultSet.updateInt("GUESSED_WRONG", guessedWrong);
-                    resultSet.updateRow();
-                } else
-                    WTSNMain.getInstance().getDatabaseManager().getStatement().executeUpdate("INSERT INTO wtsn_players (UUID, POINTS, GUESSED_CORRECTLY, GUESSED_WRONG) VALUES ('" + uuid + "', " + points + ", " + guessedCorrectly + ", " + guessedCorrectly + ")");
+                Statement statement = WTSNMain.getInstance().getDatabaseManager().getStatement();
+                if (statement == null) return;
+                try (ResultSet resultSet = statement.executeQuery("SELECT * FROM wtsn_players WHERE UUID = '" + uuid + "'")) {
+                    if (resultSet.next()) {
+                        resultSet.updateInt("POINTS", points);
+                        resultSet.updateInt("GUESSED_CORRECTLY", guessedCorrectly);
+                        resultSet.updateInt("GUESSED_WRONG", guessedWrong);
+                        resultSet.updateRow();
+                    } else
+                        WTSNMain.getInstance().getDatabaseManager().getStatement().executeUpdate("INSERT INTO wtsn_players (UUID, POINTS, GUESSED_CORRECTLY, GUESSED_WRONG) VALUES ('" + uuid + "', " + points + ", " + guessedCorrectly + ", " + guessedCorrectly + ")");
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
