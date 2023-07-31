@@ -22,10 +22,7 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void handleInventoryDrag(InventoryDragEvent event) {
         // Checks if this is the ChoseInventory
-        boolean choseInventory = false;
-        choseInventory = isChoseInventory(event.getInventory(), choseInventory);
-
-        if (!choseInventory) return;
+        if (isNotChoseInventory(event.getInventory())) return;
 
         event.setCancelled(true);
     }
@@ -36,10 +33,7 @@ public class InventoryListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player player)) return;
 
         // Checks if this is the ChoseInventory
-        boolean choseInventory = false;
-        choseInventory = isChoseInventory(event.getInventory(), choseInventory);
-
-        if (!choseInventory) return;
+        if (isNotChoseInventory(event.getInventory())) return;
 
         event.setCancelled(true);
 
@@ -65,10 +59,7 @@ public class InventoryListener implements Listener {
         if (!(event.getPlayer() instanceof Player player)) return;
 
         // Checks if this is the ChoseInventory
-        boolean choseInventory = false;
-        choseInventory = isChoseInventory(event.getInventory(), choseInventory);
-
-        if (!choseInventory) return;
+        if (isNotChoseInventory(event.getInventory())) return;
 
         // Reopens the inventory if no answer has been given yet
         if (!WTSNMain.getInstance().getGameManager().getPlayerAnswers().containsKey(player)
@@ -76,14 +67,15 @@ public class InventoryListener implements Listener {
             Bukkit.getScheduler().runTask(WTSNMain.getInstance(), () -> player.openInventory(event.getInventory()));
     }
 
-    private boolean isChoseInventory(Inventory event, boolean choseInventory) {
+    private boolean isNotChoseInventory(Inventory event) {
+        boolean choseInventory = false;
         int hashCode = event.hashCode();
         for (Inventory inventory : WTSNMain.getInstance().getInventoryManager().getChoseInventories().values())
             if (hashCode == inventory.hashCode()) {
                 choseInventory = true;
                 break;
             }
-        return choseInventory;
+        return !choseInventory;
     }
 
 }
