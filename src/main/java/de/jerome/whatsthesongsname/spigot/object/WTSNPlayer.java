@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class WTSNPlayer {
@@ -79,8 +80,11 @@ public class WTSNPlayer {
 
     private String loadName() {
         String tempName = Bukkit.getOfflinePlayer(uuid).getName();
-        if (tempName != null) return tempName;
-        return WTSNMain.getInstance().getUuidFetcher().getName(uuid);
+
+        if (tempName != null) name = tempName;
+        else name = WTSNMain.getInstance().getUuidFetcher().getName(uuid);
+
+        return name;
     }
 
     public @NotNull UUID getUuid() {
@@ -95,20 +99,19 @@ public class WTSNPlayer {
         return points;
     }
 
-    public boolean setPoints(int points) {
-        if (points < 0) return false;
+    public void setPoints(int points) {
+        if (points < 0) return;
         this.points = points;
-        return true;
     }
 
-    public boolean addPoints(int points) {
-        if (points <= 0) return false;
-        return setPoints(this.points + points);
+    public void addPoints(int points) {
+        if (points <= 0) return;
+        setPoints(this.points + points);
     }
 
-    public boolean removePoints(int points) {
-        if (points <= 0) return false;
-        return setPoints(this.points - points);
+    public void removePoints(int points) {
+        if (points <= 0) return;
+        setPoints(this.points - points);
     }
 
     public int getGuessedCorrectly() {
@@ -118,13 +121,15 @@ public class WTSNPlayer {
     public void addGuessedCorrectly() {
         addPoints(20);
 
+        if (!offlinePlayer.isOnline()) return;
+
         // command reward
         if (WTSNMain.getInstance().getConfigManager().isRewardCommandEnabled())
             for (String command : WTSNMain.getInstance().getConfigManager().getRewardCommandCorrect())
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%playerName%", getName()));
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%playerName%", Objects.requireNonNull(getName())));
 
         // vault reward
-        if (vaultManager.isEconomyEnabled())
+        if (vaultManager.isEconomyEnabled() && vaultManager.getEconomy() != null)
             vaultManager.getEconomy().depositPlayer(offlinePlayer, WTSNMain.getInstance().getConfigManager().getRewardVaultCorrect());
 
         this.guessedCorrectly++;
@@ -137,13 +142,15 @@ public class WTSNPlayer {
     public void addGuessedWrong() {
         removePoints(5);
 
+        if (!offlinePlayer.isOnline()) return;
+
         // command reward
         if (WTSNMain.getInstance().getConfigManager().isRewardCommandEnabled())
             for (String command : WTSNMain.getInstance().getConfigManager().getRewardCommandWrong())
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%playerName%", getName()));
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%playerName%", Objects.requireNonNull(getName())));
 
         // vault reward
-        if (vaultManager.isEconomyEnabled())
+        if (vaultManager.isEconomyEnabled() && vaultManager.getEconomy() != null)
             vaultManager.getEconomy().withdrawPlayer(offlinePlayer, WTSNMain.getInstance().getConfigManager().getRewardVaultWrong());
 
         this.guessedWrong++;

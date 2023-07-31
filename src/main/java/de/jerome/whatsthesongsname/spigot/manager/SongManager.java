@@ -50,7 +50,7 @@ public class SongManager {
 
         File[] files = songsDirectory.listFiles();
         if (files == null || files.length == 0) {
-            WTSNMain.getInstance().getLogger().log(Level.WARNING, "No songs were found in the folder");
+            WTSNMain.getInstance().getLogger().log(Level.WARNING, "No songs were found in the folder. Please add some songs: https://github.com/JeyVDW/WhatsTheSongsName/wiki/Songs");
             return false;
         }
 
@@ -68,7 +68,7 @@ public class SongManager {
         }
 
         if (songs.isEmpty()) {
-            WTSNMain.getInstance().getLogger().log(Level.WARNING, "No songs were found in the folder");
+            WTSNMain.getInstance().getLogger().log(Level.WARNING, "No songs were found in the folder. Please add some songs: https://github.com/JeyVDW/WhatsTheSongsName/wiki/Songs");
             return true;
         }
 
