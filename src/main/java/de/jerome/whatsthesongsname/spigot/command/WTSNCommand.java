@@ -160,7 +160,7 @@ public class WTSNCommand implements CommandExecutor, TabExecutor {
                 }
 
                 // The Stats of the player
-                commandSender.sendMessage(languagesManager.getMessage(localeCode, Messages.STATS_OWN)
+                commandSender.sendMessage(languagesManager.getMessage(localeCode, Messages.STATS_OTHER_SUCCESS)
                         .replaceAll("\\{playerName}", String.valueOf(wtsnTarget.getName()))
                         .replaceAll("\\{playerPoints}", String.valueOf(wtsnTarget.getPoints()))
                         .replaceAll("\\{playerGuessedCorrectly}", String.valueOf(wtsnTarget.getGuessedCorrectly()))
